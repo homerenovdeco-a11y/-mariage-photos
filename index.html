@@ -716,27 +716,6 @@ waitForFB(({ db, photosRef, voeux: voeuxRef, push, onValue, serverTimestamp }) =
     renderVoeux();
   });
 
-  // Upload photos
-  uploadBtn.addEventListener('click', async () => {
-    if (!pending.length || !guestName.value.trim()) return;
-    const name = guestName.value.trim();
-    uploadBtn.disabled = true;
-    progressWrap.style.display = 'block';
-    for (let i = 0; i < pending.length; i++) {
-      setStatus(`Compression ${i+1}/${pending.length}…`);
-      const b64 = await compressToBase64(pending[i], 1200, 0.78);
-      progressBar.style.width = ((i+0.5)/pending.length*100)+'%';
-      setStatus(`Envoi ${i+1}/${pending.length}…`);
-      const tag = document.getElementById('photoTag').value;
-      await push(photosRef, { author: name, url: b64, tag, hearts: 0, time: new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'}), ts: serverTimestamp() });
-      progressBar.style.width = ((i+1)/pending.length*100)+'%';
-    }
-    progressBar.style.width = '100%';
-    setStatus(`✓ ${pending.length} souvenir${pending.length>1?'s':''} partagé${pending.length>1?'s':''} !`);
-    pending=[]; fileInput.value=''; guestName.value=''; checkReady();
-    setTimeout(() => { progressWrap.style.display='none'; progressBar.style.width='0%'; setStatus(''); }, 2500);
-  });
-
   // Voeux submit
   document.getElementById('voeuxBtn').addEventListener('click', async () => {
     const text = document.getElementById('voeuxText').value.trim();
@@ -747,6 +726,32 @@ waitForFB(({ db, photosRef, voeux: voeuxRef, push, onValue, serverTimestamp }) =
     document.getElementById('voeuxName').value = '';
     document.getElementById('voeuxBtn').disabled = true;
   });
+
+  // Upload — bind here so push/serverTimestamp are available
+  uploadBtn.addEventListener('click', async () => {
+    if (!pending.length || !guestName.value.trim()) return;
+    const name = guestName.value.trim();
+    uploadBtn.disabled = true;
+    progressWrap.style.display = 'block';
+    for (let i = 0; i < pending.length; i++) {
+      setStatus('Compression ' + (i+1) + '/' + pending.length + '…');
+      const b64 = await compressToBase64(pending[i], 1200, 0.78);
+      progressBar.style.width = ((i+0.5)/pending.length*100)+'%';
+      setStatus('Envoi ' + (i+1) + '/' + pending.length + '…');
+      const tag = document.getElementById('photoTag').value;
+      await push(photosRef, {
+        author: name, url: b64, tag, hearts: 0,
+        time: new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'}),
+        ts: serverTimestamp()
+      });
+      progressBar.style.width = ((i+1)/pending.length*100)+'%';
+    }
+    progressBar.style.width = '100%';
+    setStatus('✓ ' + pending.length + ' souvenir' + (pending.length>1?'s':'') + ' partagé' + (pending.length>1?'s':'') + ' !');
+    pending=[]; fileInput.value=''; guestName.value=''; checkReady();
+    setTimeout(() => { progressWrap.style.display='none'; progressBar.style.width='0%'; setStatus(''); }, 2500);
+  });
+
 });
 
 // ── COMPRESS ──
