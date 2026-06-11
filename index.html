@@ -391,7 +391,7 @@ function cV(){document.getElementById('vbtn').disabled=!(document.getElementById
 
 // ── GALLERY ──
 function rGallery(){
-  var authors=[...new Set(photos.map(function(p){return p.author;}))];
+  var authors=Array.from(new Set(photos.map(function(p){return p.author;})));
   var fc=document.getElementById('fchips');
   fc.innerHTML='<button class="chip'+(aflt==='all'?' on':'')+'" data-f="all">Tous les invités</button>';
   authors.forEach(function(a){
