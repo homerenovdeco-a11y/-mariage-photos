@@ -5,86 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mariage Solène & Sébastien · 27.06.2026</title>
 <meta name="theme-color" content="#2C1F0E">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
 :root{--or:#C9A84C;--or-pale:#E8D5A3;--ivoire:#F8F4EE;--brun:#2C1F0E;--gris:#7A6E62;--blanc:#FDFAF6;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--ivoire);font-family:'Jost',sans-serif;color:var(--brun);}
+body{background:var(--ivoire);font-family:system-ui,sans-serif;color:var(--brun);}
 .hero{position:relative;min-height:480px;display:flex;align-items:flex-end;overflow:hidden;}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 8%;filter:brightness(.72);}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(44,31,14,.1),rgba(44,31,14,.92));}
 .hero-content{position:relative;z-index:2;width:100%;text-align:center;padding:40px 20px;}
-.ornament{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--or);letter-spacing:8px;margin-bottom:8px;}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,6vw,56px);font-weight:300;color:var(--or-pale);white-space:nowrap;letter-spacing:3px;}
+.ornament{font-family:Georgia,serif;font-size:18px;color:var(--or);letter-spacing:8px;margin-bottom:8px;}
+.hero-title{font-family:Georgia,serif;font-size:clamp(26px,6vw,56px);font-weight:300;color:var(--or-pale);white-space:nowrap;letter-spacing:3px;}
 .hero-title em{font-style:italic;color:var(--or);}
 .hero-date{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--or);margin-top:10px;}
-.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--or-pale);margin-top:6px;}
+.hero-sub{font-family:Georgia,serif;font-style:italic;font-size:16px;color:var(--or-pale);margin-top:6px;}
 .divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);margin:14px auto 0;}
 .cd{background:var(--brun);padding:18px;text-align:center;}
 .cd-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);margin-bottom:10px;}
 .cd-row{display:flex;justify-content:center;align-items:flex-end;gap:4px;}
 .cd-block{text-align:center;min-width:48px;}
-.cd-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--or);line-height:1;}
+.cd-num{font-family:Georgia,serif;font-size:36px;color:var(--or);line-height:1;}
 .cd-unit{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-top:2px;}
-.cd-sep{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);opacity:.3;padding-bottom:8px;}
+.cd-sep{font-family:Georgia,serif;font-size:22px;color:var(--or);opacity:.3;padding-bottom:8px;}
 .tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--or-pale);scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
-.tab{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;padding:13px 14px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);cursor:pointer;margin-bottom:-1px;white-space:nowrap;}
+.tab{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;padding:13px 14px;font-family:system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);cursor:pointer;margin-bottom:-1px;white-space:nowrap;}
 .tab.on{color:var(--brun);border-bottom-color:var(--or);}
 .page{display:none;}
 .page.on{display:block;}
 .wrap{max-width:700px;margin:0 auto;padding:24px 16px;}
 .lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);text-align:center;display:block;margin-bottom:12px;}
-.note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--or);text-align:center;margin-bottom:10px;}
+.note{font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--or);text-align:center;margin-bottom:10px;}
 .zone{border:1.5px dashed var(--or-pale);border-radius:4px;background:var(--blanc);padding:28px 16px;text-align:center;}
 .zone-icon{font-size:28px;display:block;margin-bottom:6px;}
-.zone-txt{font-family:'Cormorant Garamond',serif;font-size:18px;}
+.zone-txt{font-family:Georgia,serif;font-size:18px;}
 .zone-hint{font-size:11px;color:var(--gris);margin-top:4px;}
-.pick-btn{display:inline-block;margin-top:12px;background:var(--or);color:var(--brun);padding:10px 26px;border-radius:2px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+.pick-btn{display:inline-block;margin-top:12px;background:var(--or);color:var(--brun);padding:10px 26px;border-radius:2px;font-family:system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
 .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
-.inp{flex:1;min-width:120px;border:1px solid var(--or-pale);background:var(--blanc);padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--brun);border-radius:2px;outline:none;}
+.inp{flex:1;min-width:120px;border:1px solid var(--or-pale);background:var(--blanc);padding:10px 12px;font-family:system-ui,sans-serif;font-size:13px;color:var(--brun);border-radius:2px;outline:none;}
 .inp:focus{border-color:var(--or);}
 .inp::placeholder{color:var(--gris);}
 select.inp{cursor:pointer;}
-.btn{background:var(--or);color:var(--brun);border:none;padding:10px 22px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;width:100%;margin-top:10px;}
+.btn{background:var(--or);color:var(--brun);border:none;padding:10px 22px;font-family:system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;width:100%;margin-top:10px;}
 .btn:disabled{opacity:.4;}
 .prog-wrap{height:3px;background:#EDE7D9;border-radius:2px;overflow:hidden;margin-top:8px;display:none;}
 .prog-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));width:0;transition:width .3s;}
 .status{font-size:12px;color:var(--gris);text-align:center;margin-top:6px;font-style:italic;min-height:16px;}
 .gwrap{max-width:1000px;margin:0 auto;padding:0 16px 50px;}
 .ghead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:22px;margin-bottom:14px;}
-.gtitle{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:2px;}
+.gtitle{font-family:Georgia,serif;font-size:24px;font-weight:300;letter-spacing:2px;}
 .badge{background:var(--or);color:var(--brun);font-size:10px;padding:2px 9px;border-radius:20px;}
-.obtn{background:none;border:1px solid var(--or-pale);color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;}
+.obtn{background:none;border:1px solid var(--or-pale);color:var(--gris);font-family:system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.chip{border:1px solid var(--or-pale);background:none;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;cursor:pointer;}
+.chip{border:1px solid var(--or-pale);background:none;color:var(--gris);font-family:system-ui,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;cursor:pointer;}
 .chip.on,.chip:hover{border-color:var(--or);color:var(--brun);background:#EDE7D9;}
 .grid{columns:3 200px;gap:10px;}
 .card{break-inside:avoid;margin-bottom:10px;background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 1px 6px rgba(44,31,14,.08);cursor:pointer;position:relative;}
 .card img{width:100%;display:block;}
 .card-meta{padding:7px 9px 9px;}
-.card-author{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;}
+.card-author{font-family:Georgia,serif;font-style:italic;font-size:13px;}
 .card-time{font-size:10px;color:var(--gris);}
 .hbtn{position:absolute;top:7px;right:7px;background:rgba(253,250,246,.88);border:none;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
 .card:hover .hbtn,.hbtn.on{opacity:1;}
 .empty{text-align:center;padding:40px 20px;}
 .empty-icon{font-size:32px;opacity:.3;margin-bottom:10px;}
-.empty-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;}
+.empty-txt{font-family:Georgia,serif;font-style:italic;font-size:18px;}
 .empty-sub{font-size:11px;color:var(--gris);margin-top:5px;}
 .lb{display:none;position:fixed;inset:0;background:rgba(44,31,14,.93);z-index:100;align-items:center;justify-content:center;padding:14px;}
 .lb.on{display:flex;}
 .lb-in{max-width:840px;width:100%;position:relative;}
 .lb-in img{width:100%;max-height:76vh;object-fit:contain;display:block;border-radius:2px;}
 .lb-info{color:var(--ivoire);padding:10px 2px 0;display:flex;justify-content:space-between;align-items:center;}
-.lb-author{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;}
+.lb-author{font-family:Georgia,serif;font-size:17px;font-style:italic;}
 .lb-x{position:absolute;top:-11px;right:-11px;background:var(--or);border:none;color:var(--brun);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;}
 .vlist{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
 .vcard{background:var(--blanc);border-left:3px solid var(--or);padding:12px 14px;border-radius:0 3px 3px 0;}
-.vtxt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;line-height:1.5;}
+.vtxt{font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.5;}
 .vauth{font-size:10px;color:var(--gris);letter-spacing:2px;text-transform:uppercase;margin-top:7px;}
 .lbrow{display:flex;align-items:center;gap:8px;padding:11px 12px;background:var(--blanc);border-radius:3px;margin-bottom:7px;box-shadow:0 1px 4px rgba(44,31,14,.06);}
-.lbrank{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--or);width:26px;text-align:center;}
-.lbname{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;flex:1;}
+.lbrank{font-family:Georgia,serif;font-size:20px;color:var(--or);width:26px;text-align:center;}
+.lbname{font-family:Georgia,serif;font-style:italic;font-size:16px;flex:1;}
 .lbbar-w{flex:2;height:3px;background:#EDE7D9;border-radius:2px;overflow:hidden;}
 .lbbar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));transition:width .5s;}
 .lbcnt{font-size:10px;color:var(--gris);}
@@ -92,9 +92,9 @@ select.inp{cursor:pointer;}
 .ccard{background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 2px 8px rgba(44,31,14,.09);}
 .ccard img{width:100%;height:170px;object-fit:cover;display:block;}
 .cinfo{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;}
-.cauth{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;}
+.cauth{font-family:Georgia,serif;font-style:italic;font-size:14px;}
 .cvotes{font-size:11px;color:var(--gris);}
-.vbtn{display:block;width:calc(100% - 20px);margin:0 10px 10px;border:1.5px solid var(--or-pale);background:transparent;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px;border-radius:2px;cursor:pointer;}
+.vbtn{display:block;width:calc(100% - 20px);margin:0 10px 10px;border:1.5px solid var(--or-pale);background:transparent;color:var(--gris);font-family:system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px;border-radius:2px;cursor:pointer;}
 .vbtn:hover{border-color:var(--or);color:var(--brun);}
 .vbtn.voted{background:var(--or);border-color:var(--or);color:var(--brun);font-weight:500;}
 .cbar-w{height:3px;background:#EDE7D9;margin:0 10px 8px;border-radius:2px;overflow:hidden;}
@@ -200,7 +200,7 @@ select.inp{cursor:pointer;}
 <div class="page" id="p-voeux">
   <div class="wrap">
     <span class="lbl">Laissez un message</span>
-    <textarea class="inp" id="vtxt" placeholder="Vos vœux, une anecdote, un souvenir…" style="width:100%;min-height:100px;resize:vertical;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;padding:10px 12px;"></textarea>
+    <textarea class="inp" id="vtxt" placeholder="Vos vœux, une anecdote, un souvenir…" style="width:100%;min-height:100px;resize:vertical;font-family:Georgia,serif;font-size:16px;font-style:italic;padding:10px 12px;"></textarea>
     <div class="row" style="margin-top:8px;">
       <input type="text" class="inp" id="vname" placeholder="Votre prénom">
       <button class="btn" id="vbtn" disabled style="width:auto;margin-top:0;">Envoyer</button>
@@ -219,9 +219,9 @@ select.inp{cursor:pointer;}
 <div class="page" id="p-concours">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);margin-bottom:6px;">✦</div>
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:3px;">La plus belle photo</h2>
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-top:7px;line-height:1.6;">Votez pour votre photo préférée<br>Le gagnant reçoit un cadeau surprise 🎁</p>
+      <div style="font-family:Georgia,serif;font-size:22px;color:var(--or);margin-bottom:6px;">✦</div>
+      <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:300;letter-spacing:3px;">La plus belle photo</h2>
+      <p style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--gris);margin-top:7px;line-height:1.6;">Votez pour votre photo préférée<br>Le gagnant reçoit un cadeau surprise 🎁</p>
       <div style="display:inline-block;margin-top:12px;background:var(--brun);color:var(--or-pale);font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border-radius:2px;">Votes ouverts le 28 juin à 14h</div>
     </div>
     <div class="cgrid" id="cgrid"></div>
@@ -255,11 +255,11 @@ select.inp{cursor:pointer;}
 <div class="page" id="p-cadre">
   <div class="wrap" style="text-align:center;">
     <span class="lbl">Cadre souvenir</span>
-    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">Encadrez votre photo aux couleurs du mariage</p>
+    <p style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">Encadrez votre photo aux couleurs du mariage</p>
     <div class="fzone" id="fzone">
       <input type="file" id="ff" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;">
       <span style="font-size:26px;display:block;margin-bottom:6px;">🖼️</span>
-      <label for="ff" style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gris);cursor:pointer;">Choisir une photo</label>
+      <label for="ff" style="font-family:Georgia,serif;font-size:17px;color:var(--gris);cursor:pointer;">Choisir une photo</label>
     </div>
     <canvas id="fc" style="display:none;max-width:100%;margin-top:14px;border-radius:3px;"></canvas>
     <div id="fa" style="display:none;margin-top:12px;">
@@ -272,7 +272,7 @@ select.inp{cursor:pointer;}
 <div class="page" id="p-qr">
   <div class="wrap" style="text-align:center;">
     <span class="lbl">QR Code de l'application</span>
-    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">À imprimer et déposer sur les tables</p>
+    <p style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">À imprimer et déposer sur les tables</p>
     <div class="qbox">
       <canvas id="qrc"></canvas>
       <div class="qurl">https://homerenovdeco-a11y.github.io/-mariage-photos/</div>
@@ -296,11 +296,11 @@ select.inp{cursor:pointer;}
 <div style="display:none;position:fixed;inset:0;background:rgba(20,12,4,.97);z-index:150;flex-direction:column;align-items:center;justify-content:center;" id="ss">
   <button style="position:absolute;top:16px;right:16px;background:var(--or);border:none;color:var(--brun);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;" id="ssx">✕</button>
   <img id="ssimg" src="" alt="" style="max-width:90vw;max-height:78vh;object-fit:contain;">
-  <div id="ssinf" style="color:var(--or-pale);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;margin-top:12px;"></div>
+  <div id="ssinf" style="color:var(--or-pale);font-family:Georgia,serif;font-style:italic;font-size:17px;margin-top:12px;"></div>
   <div id="ssprog" style="position:absolute;bottom:0;left:0;height:2px;background:var(--or);transition:width .1s linear;"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
 <script>
 // ── COUNTDOWN ──
 function tick(){
