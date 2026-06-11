@@ -1006,7 +1006,7 @@ function scheduleVoteNotification() {
       setTimeout(() => {
         new Notification('🎁 Mariage Solène & Sébastien', {
           body: 'Les votes sont ouverts ! Choisissez la plus belle photo du mariage.',
-          icon: 'https://homerenovdeco-a11y.github.io/mariage-photos/favicon.ico'
+          icon: 'https://homerenovdeco-a11y.github.io/-mariage-photos//favicon.ico'
         });
       }, delay);
     }
@@ -1132,7 +1132,7 @@ function drawFrame(src) {
     // WhatsApp share
     const dataUrl = frameCanvas.toDataURL('image/jpeg', 0.92);
     document.getElementById('shareWa').href =
-      'https://wa.me/?text=' + encodeURIComponent('Notre souvenir du mariage Solène & Sébastien 💛 27.06.2026\nhttps://homerenovdeco-a11y.github.io/mariage-photos');
+      'https://wa.me/?text=' + encodeURIComponent('Notre souvenir du mariage Solène & Sébastien 💛 27.06.2026\nhttps://homerenovdeco-a11y.github.io/-mariage-photos/');
   };
   img.src = src;
 }
