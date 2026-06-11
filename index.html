@@ -277,7 +277,7 @@ select.inp{cursor:pointer;}
     <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">À imprimer et déposer sur les tables</p>
     <div class="qbox">
       <canvas id="qrc"></canvas>
-      <div class="qurl">https://homerenovdeco-a11y.github.io/-mariage-photos/</div>
+      <div class="qurl">https://glistening-smakager-80ded9.netlify.app</div>
     </div>
     <button class="btn" id="qrdl" style="margin-top:12px;">⬇ Télécharger le QR code</button>
     <a href="https://wa.me/?text=https%3A%2F%2Fhomerenovdeco-a11y.github.io%2F-mariage-photos%2F" target="_blank" class="obtn" style="display:block;margin-top:8px;text-align:center;">💬 Partager sur WhatsApp</a>
@@ -474,7 +474,7 @@ function rConcours(){
 
 function rQR(){
   if(typeof QRCode!=='undefined'){
-    QRCode.toCanvas(document.getElementById('qrc'),'https://homerenovdeco-a11y.github.io/-mariage-photos/',{width:200,margin:2,color:{dark:'#2C1F0E',light:'#ffffff'}});
+    QRCode.toCanvas(document.getElementById('qrc'),'https://glistening-smakager-80ded9.netlify.app',{width:200,margin:2,color:{dark:'#2C1F0E',light:'#ffffff'}});
   }
 }
 setTimeout(rQR,1000);
@@ -507,8 +507,25 @@ document.getElementById('dlbtn').addEventListener('click',function(){
   photos.forEach(function(p,i){setTimeout(function(){var a=document.createElement('a');a.href=p.url;a.download='mariage-'+p.author+'-'+i+'.jpg';a.click();},i*400);});
 });
 
+// CADRE MOVED
+document.getElementById('qrdl').addEventListener('click',function(){
+  rQR();setTimeout(function(){var a=document.createElement('a');a.download='qr-mariage.png';a.href=document.getElementById('qrc').toDataURL();a.click();},300);
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){document.getElementById('lb').classList.remove('on');clearTimeout(ssT);document.getElementById('ss').style.display='none';}
+});
+
+// Init gallery
+rGallery();rVoeux();
+}); // end load
+
 // ── CADRE ──
 var currentFrameImg = null;
+document.addEventListener("DOMContentLoaded", function(){
+  var fz=document.getElementById("fzone");
+  if(fz) fz.addEventListener("click",function(e){if(e.target.tagName!=="LABEL")document.getElementById("ff").click();});
+});
 var currentFrame = 0;
 
 document.getElementById('ff').addEventListener('change',function(e){
@@ -675,22 +692,11 @@ function drawF(img, frame){
     c.fillStyle='#3D5A2E';c.font='italic 300 22px serif';c.fillText('27 · 06 · 2026',S/2,S-14);
   }
 
-  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage S&S 💛 https://homerenovdeco-a11y.github.io/-mariage-photos/');
+  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage S&S 💛 https://glistening-smakager-80ded9.netlify.app');
 }
 document.getElementById('fdl').addEventListener('click',function(){
   var a=document.createElement('a');a.download='souvenir-ss.jpg';a.href=document.getElementById('fc').toDataURL('image/jpeg',.92);a.click();
 });
-document.getElementById('qrdl').addEventListener('click',function(){
-  rQR();setTimeout(function(){var a=document.createElement('a');a.download='qr-mariage.png';a.href=document.getElementById('qrc').toDataURL();a.click();},300);
-});
-
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){document.getElementById('lb').classList.remove('on');clearTimeout(ssT);document.getElementById('ss').style.display='none';}
-});
-
-// Init gallery
-rGallery();rVoeux();
-}); // end load
 </script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </body>
