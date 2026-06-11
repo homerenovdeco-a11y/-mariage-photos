@@ -5,142 +5,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mariage Solène & Sébastien · 27.06.2026</title>
 <meta name="theme-color" content="#2C1F0E">
-<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-
-<!-- Firebase chargé en différé -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" defer></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js" defer></script>
-
 <style>
-:root{--or:#C9A84C;--or-pale:#E8D5A3;--ivoire:#F8F4EE;--ivoire-deep:#EDE7D9;--brun:#2C1F0E;--gris:#7A6E62;--blanc:#FDFAF6;}
+:root{--or:#C9A84C;--or-pale:#E8D5A3;--ivoire:#F8F4EE;--brun:#2C1F0E;--gris:#7A6E62;--blanc:#FDFAF6;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--ivoire);font-family:'Jost',sans-serif;color:var(--brun);min-height:100vh;}
-.hero{position:relative;overflow:hidden;min-height:500px;display:flex;align-items:flex-end;}
-.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 8%;filter:brightness(.72);}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(44,31,14,.1) 0%,rgba(44,31,14,.6) 50%,rgba(44,31,14,.93) 100%);}
-.hero-content{position:relative;z-index:2;width:100%;text-align:center;padding:48px 24px 40px;}
-.hero-ornament{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--or);letter-spacing:8px;margin-bottom:10px;}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,6vw,60px);font-weight:300;letter-spacing:3px;color:var(--or-pale);white-space:nowrap;}
+body{background:var(--ivoire);font-family:'Jost',sans-serif;color:var(--brun);}
+.hero{position:relative;min-height:480px;display:flex;align-items:flex-end;overflow:hidden;}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 8%;filter:brightness(.72);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(44,31,14,.1),rgba(44,31,14,.92));}
+.hero-content{position:relative;z-index:2;width:100%;text-align:center;padding:40px 20px;}
+.ornament{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--or);letter-spacing:8px;margin-bottom:8px;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,6vw,56px);font-weight:300;color:var(--or-pale);white-space:nowrap;letter-spacing:3px;}
 .hero-title em{font-style:italic;color:var(--or);}
-.hero-date{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--or);margin-top:12px;}
-.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--or-pale);margin-top:8px;}
-.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);margin:18px auto 0;}
-.countdown{background:var(--brun);padding:20px;text-align:center;}
-.cd-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;}
-.cd-blocks{display:flex;justify-content:center;align-items:flex-end;gap:4px;}
-.cd-block{text-align:center;min-width:52px;}
-.cd-num{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--or);line-height:1;}
-.cd-unit{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-top:3px;}
-.cd-sep{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--or);opacity:.35;padding-bottom:10px;}
-.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--or-pale);padding:0 16px;scrollbar-width:none;}
+.hero-date{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--or);margin-top:10px;}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--or-pale);margin-top:6px;}
+.divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);margin:14px auto 0;}
+.cd{background:var(--brun);padding:18px;text-align:center;}
+.cd-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);margin-bottom:10px;}
+.cd-row{display:flex;justify-content:center;align-items:flex-end;gap:4px;}
+.cd-block{text-align:center;min-width:48px;}
+.cd-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--or);line-height:1;}
+.cd-unit{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-top:2px;}
+.cd-sep{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);opacity:.3;padding-bottom:8px;}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--or-pale);scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
-.tab-btn{flex-shrink:0;background:none;border:none;padding:14px 12px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
-.tab-btn.active{color:var(--brun);border-bottom-color:var(--or);}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-.section{max-width:720px;margin:0 auto;padding:28px 20px;}
-.section-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);text-align:center;display:block;margin-bottom:14px;}
-.note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--or);text-align:center;margin-bottom:12px;}
-.upload-zone{border:1.5px dashed var(--or-pale);border-radius:4px;background:var(--blanc);padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;}
-.upload-zone:hover,.upload-zone.over{border-color:var(--or);background:var(--ivoire-deep);}
-.upload-icon{font-size:30px;display:block;margin-bottom:8px;}
-.upload-cta{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--brun);}
-.upload-hint{font-size:11px;color:var(--gris);margin-top:5px;}
-.row{display:flex;gap:10px;margin-top:12px;}
-.input{flex:1;border:1px solid var(--or-pale);background:var(--blanc);padding:11px 14px;font-family:'Jost',sans-serif;font-size:13px;color:var(--brun);border-radius:2px;outline:none;}
-.input:focus{border-color:var(--or);}
-.input::placeholder{color:var(--gris);}
-select.input{cursor:pointer;}
-.btn{background:var(--or);color:var(--brun);border:none;padding:11px 24px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;}
-.btn:disabled{opacity:.4;cursor:default;}
-.btn:not(:disabled):hover{background:#B8932E;}
-.btn-outline{background:transparent;border:1px solid var(--or-pale);color:var(--gris);padding:9px 18px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;text-decoration:none;display:inline-block;}
-.btn-outline:hover{border-color:var(--or);color:var(--brun);}
-.progress-wrap{height:3px;background:var(--ivoire-deep);border-radius:2px;overflow:hidden;margin-top:10px;display:none;}
-.progress-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));width:0;transition:width .3s;}
-.status{font-size:12px;color:var(--gris);text-align:center;margin-top:6px;min-height:16px;font-style:italic;}
-.gallery-wrap{max-width:1100px;margin:0 auto;padding:0 20px 60px;}
-.gallery-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding-top:28px;}
-.gallery-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;letter-spacing:2px;}
-.badge{background:var(--or);color:var(--brun);font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;}
-.chip-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.chip{border:1px solid var(--or-pale);background:none;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;cursor:pointer;}
-.chip.active,.chip:hover{border-color:var(--or);color:var(--brun);background:var(--ivoire-deep);}
-.masonry{columns:3 240px;gap:10px;}
-.photo-card{break-inside:avoid;margin-bottom:10px;background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 1px 6px rgba(44,31,14,.08);cursor:pointer;position:relative;transition:transform .2s,box-shadow .2s;}
-.photo-card:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(44,31,14,.13);}
-.photo-card img{width:100%;display:block;}
-.photo-meta{padding:8px 10px 10px;}
-.photo-author{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;}
-.photo-time{font-size:10px;color:var(--gris);margin-top:1px;}
-.heart-btn{position:absolute;top:8px;right:8px;background:rgba(253,250,246,.85);border:none;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
-.photo-card:hover .heart-btn,.heart-btn.on{opacity:1;}
-.lb{display:none;position:fixed;inset:0;background:rgba(44,31,14,.93);z-index:100;align-items:center;justify-content:center;padding:16px;}
-.lb.open{display:flex;}
-.lb-inner{max-width:860px;width:100%;position:relative;}
-.lb-inner img{width:100%;max-height:76vh;object-fit:contain;display:block;border-radius:2px;}
-.lb-info{color:var(--ivoire);padding:12px 2px 0;display:flex;justify-content:space-between;align-items:center;}
-.lb-author{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;}
-.lb-close{position:absolute;top:-12px;right:-12px;background:var(--or);border:none;color:var(--brun);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;}
-.voeux-list{display:flex;flex-direction:column;gap:12px;margin-top:24px;}
-.voeu-card{background:var(--blanc);border-left:3px solid var(--or);padding:14px 16px;border-radius:0 3px 3px 0;}
-.voeu-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;line-height:1.5;}
-.voeu-author{font-size:11px;color:var(--gris);letter-spacing:2px;text-transform:uppercase;margin-top:8px;}
-.lb-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--blanc);border-radius:3px;margin-bottom:8px;box-shadow:0 1px 4px rgba(44,31,14,.06);}
-.lb-rank{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);width:28px;text-align:center;}
-.lb-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;flex:1;}
-.lb-bar-wrap{flex:2;height:3px;background:var(--ivoire-deep);border-radius:2px;overflow:hidden;}
-.lb-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));transition:width .5s;}
-.lb-count{font-size:11px;color:var(--gris);}
-.concours-header{text-align:center;margin-bottom:28px;}
-.concours-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;letter-spacing:3px;}
-.concours-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gris);margin-top:8px;line-height:1.6;}
-.concours-deadline{display:inline-block;margin-top:14px;background:var(--brun);color:var(--or-pale);font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:7px 18px;border-radius:2px;}
-.concours-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-.c-card{background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 2px 10px rgba(44,31,14,.09);}
-.c-card img{width:100%;height:190px;object-fit:cover;display:block;}
-.c-card-info{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;}
-.c-author{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;}
-.c-votes{font-size:12px;color:var(--gris);}
-.vote-btn{display:block;width:calc(100% - 24px);margin:0 12px 12px;border:1.5px solid var(--or-pale);background:transparent;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px;border-radius:2px;cursor:pointer;}
-.vote-btn:hover{border-color:var(--or);color:var(--brun);}
-.vote-btn.voted{background:var(--or);border-color:var(--or);color:var(--brun);font-weight:500;}
-.c-bar-wrap{height:3px;background:var(--ivoire-deep);margin:0 12px 10px;border-radius:2px;overflow:hidden;}
-.c-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));}
-.plan-wrap{background:var(--blanc);border-radius:4px;overflow:hidden;box-shadow:0 2px 12px rgba(44,31,14,.1);}
-.frame-zone{border:1.5px dashed var(--or-pale);border-radius:4px;background:var(--blanc);padding:28px;text-align:center;cursor:pointer;}
-.frame-zone:hover{border-color:var(--or);}
-.qr-box{background:var(--blanc);border:1px solid var(--or-pale);border-radius:4px;padding:24px;text-align:center;}
-.qr-url{font-size:11px;color:var(--gris);margin-top:10px;word-break:break-all;}
-.ss-overlay{display:none;position:fixed;inset:0;background:rgba(20,12,4,.97);z-index:150;flex-direction:column;align-items:center;justify-content:center;}
-.ss-overlay.open{display:flex;}
-.ss-overlay img{max-width:90vw;max-height:78vh;object-fit:contain;}
-.ss-info{color:var(--or-pale);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;margin-top:14px;}
-.ss-close{position:absolute;top:18px;right:18px;background:var(--or);border:none;color:var(--brun);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;}
-.ss-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--or);transition:width .1s linear;}
-#stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.4;}
-.empty{text-align:center;padding:48px 20px;}
-.empty-icon{font-size:36px;opacity:.3;margin-bottom:12px;}
-.empty-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;}
-.empty-sub{font-size:12px;color:var(--gris);margin-top:6px;letter-spacing:1px;}
-.loader{display:flex;justify-content:center;padding:40px;}
-.dot{width:8px;height:8px;background:var(--or);border-radius:50%;margin:0 4px;animation:bounce .9s ease-in-out infinite;}
-.dot:nth-child(2){animation-delay:.15s;}
-.dot:nth-child(3){animation-delay:.3s;}
-@keyframes bounce{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
-@media(max-width:600px){.masonry{columns:2 150px;}.row{flex-direction:column;}.btn{width:100%;}}
+.tab{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;padding:13px 14px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);cursor:pointer;margin-bottom:-1px;white-space:nowrap;}
+.tab.on{color:var(--brun);border-bottom-color:var(--or);}
+.page{display:none;}
+.page.on{display:block;}
+.wrap{max-width:700px;margin:0 auto;padding:24px 16px;}
+.lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);text-align:center;display:block;margin-bottom:12px;}
+.note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--or);text-align:center;margin-bottom:10px;}
+.zone{border:1.5px dashed var(--or-pale);border-radius:4px;background:var(--blanc);padding:28px 16px;text-align:center;}
+.zone-icon{font-size:28px;display:block;margin-bottom:6px;}
+.zone-txt{font-family:'Cormorant Garamond',serif;font-size:18px;}
+.zone-hint{font-size:11px;color:var(--gris);margin-top:4px;}
+.pick-btn{display:inline-block;margin-top:12px;background:var(--or);color:var(--brun);padding:10px 26px;border-radius:2px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+.row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.inp{flex:1;min-width:120px;border:1px solid var(--or-pale);background:var(--blanc);padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--brun);border-radius:2px;outline:none;}
+.inp:focus{border-color:var(--or);}
+.inp::placeholder{color:var(--gris);}
+select.inp{cursor:pointer;}
+.btn{background:var(--or);color:var(--brun);border:none;padding:10px 22px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;width:100%;margin-top:10px;}
+.btn:disabled{opacity:.4;}
+.prog-wrap{height:3px;background:#EDE7D9;border-radius:2px;overflow:hidden;margin-top:8px;display:none;}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));width:0;transition:width .3s;}
+.status{font-size:12px;color:var(--gris);text-align:center;margin-top:6px;font-style:italic;min-height:16px;}
+.gwrap{max-width:1000px;margin:0 auto;padding:0 16px 50px;}
+.ghead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:22px;margin-bottom:14px;}
+.gtitle{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:2px;}
+.badge{background:var(--or);color:var(--brun);font-size:10px;padding:2px 9px;border-radius:20px;}
+.obtn{background:none;border:1px solid var(--or-pale);color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.chip{border:1px solid var(--or-pale);background:none;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;cursor:pointer;}
+.chip.on,.chip:hover{border-color:var(--or);color:var(--brun);background:#EDE7D9;}
+.grid{columns:3 200px;gap:10px;}
+.card{break-inside:avoid;margin-bottom:10px;background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 1px 6px rgba(44,31,14,.08);cursor:pointer;position:relative;}
+.card img{width:100%;display:block;}
+.card-meta{padding:7px 9px 9px;}
+.card-author{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;}
+.card-time{font-size:10px;color:var(--gris);}
+.hbtn{position:absolute;top:7px;right:7px;background:rgba(253,250,246,.88);border:none;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.card:hover .hbtn,.hbtn.on{opacity:1;}
+.empty{text-align:center;padding:40px 20px;}
+.empty-icon{font-size:32px;opacity:.3;margin-bottom:10px;}
+.empty-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;}
+.empty-sub{font-size:11px;color:var(--gris);margin-top:5px;}
+.lb{display:none;position:fixed;inset:0;background:rgba(44,31,14,.93);z-index:100;align-items:center;justify-content:center;padding:14px;}
+.lb.on{display:flex;}
+.lb-in{max-width:840px;width:100%;position:relative;}
+.lb-in img{width:100%;max-height:76vh;object-fit:contain;display:block;border-radius:2px;}
+.lb-info{color:var(--ivoire);padding:10px 2px 0;display:flex;justify-content:space-between;align-items:center;}
+.lb-author{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;}
+.lb-x{position:absolute;top:-11px;right:-11px;background:var(--or);border:none;color:var(--brun);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;}
+.vlist{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.vcard{background:var(--blanc);border-left:3px solid var(--or);padding:12px 14px;border-radius:0 3px 3px 0;}
+.vtxt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;line-height:1.5;}
+.vauth{font-size:10px;color:var(--gris);letter-spacing:2px;text-transform:uppercase;margin-top:7px;}
+.lbrow{display:flex;align-items:center;gap:8px;padding:11px 12px;background:var(--blanc);border-radius:3px;margin-bottom:7px;box-shadow:0 1px 4px rgba(44,31,14,.06);}
+.lbrank{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--or);width:26px;text-align:center;}
+.lbname{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;flex:1;}
+.lbbar-w{flex:2;height:3px;background:#EDE7D9;border-radius:2px;overflow:hidden;}
+.lbbar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));transition:width .5s;}
+.lbcnt{font-size:10px;color:var(--gris);}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.ccard{background:var(--blanc);border-radius:3px;overflow:hidden;box-shadow:0 2px 8px rgba(44,31,14,.09);}
+.ccard img{width:100%;height:170px;object-fit:cover;display:block;}
+.cinfo{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;}
+.cauth{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;}
+.cvotes{font-size:11px;color:var(--gris);}
+.vbtn{display:block;width:calc(100% - 20px);margin:0 10px 10px;border:1.5px solid var(--or-pale);background:transparent;color:var(--gris);font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px;border-radius:2px;cursor:pointer;}
+.vbtn:hover{border-color:var(--or);color:var(--brun);}
+.vbtn.voted{background:var(--or);border-color:var(--or);color:var(--brun);font-weight:500;}
+.cbar-w{height:3px;background:#EDE7D9;margin:0 10px 8px;border-radius:2px;overflow:hidden;}
+.cbar{height:100%;background:linear-gradient(90deg,var(--or),var(--or-pale));}
+.qbox{background:var(--blanc);border:1px solid var(--or-pale);border-radius:4px;padding:20px;text-align:center;}
+.qurl{font-size:10px;color:var(--gris);margin-top:8px;word-break:break-all;}
+.fzone{border:1.5px dashed var(--or-pale);border-radius:4px;background:var(--blanc);padding:24px;text-align:center;cursor:pointer;}
+.fzone:hover{border-color:var(--or);}
+.plan-svg{width:100%;display:block;background:#f0ebe0;border-radius:4px;}
+.fb-status{font-size:11px;color:var(--gris);text-align:center;padding:6px;font-style:italic;}
+@media(max-width:500px){.grid{columns:2 140px;}.row{flex-direction:column;}}
 </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
-
 <div class="hero">
-  <img class="hero-photo" src="couple.jpg" alt="Solène & Sébastien">
+  <img src="couple.jpg" alt="Solène & Sébastien">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-ornament">✦ ✦ ✦</div>
+    <div class="ornament">✦ ✦ ✦</div>
     <h1 class="hero-title">Solène <em>&</em> Sébastien</h1>
     <p class="hero-date">27 · 06 · 2026</p>
     <p class="hero-sub">Partagez vos plus beaux souvenirs de notre semaine et notre journée</p>
@@ -148,9 +122,9 @@ select.input{cursor:pointer;}
   </div>
 </div>
 
-<div class="countdown" id="countdown">
+<div class="cd" id="cd">
   <div class="cd-label">Le grand jour dans</div>
-  <div class="cd-blocks">
+  <div class="cd-row">
     <div class="cd-block"><div class="cd-num" id="cdJ">--</div><div class="cd-unit">jours</div></div>
     <div class="cd-sep">·</div>
     <div class="cd-block"><div class="cd-num" id="cdH">--</div><div class="cd-unit">heures</div></div>
@@ -162,29 +136,29 @@ select.input{cursor:pointer;}
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" data-tab="photos">📷 Photos</button>
-  <button class="tab-btn" data-tab="voeux">💌 Vœux</button>
-  <button class="tab-btn" data-tab="palmares">🏆 Palmarès</button>
-  <button class="tab-btn" data-tab="concours">🎁 Concours</button>
-  <button class="tab-btn" data-tab="plan">🗺️ Plan</button>
-  <button class="tab-btn" data-tab="cadre">🖼️ Cadre</button>
-  <button class="tab-btn" data-tab="qr">📱 QR Code</button>
+  <button class="tab on" data-p="photos">📷 Photos</button>
+  <button class="tab" data-p="voeux">💌 Vœux</button>
+  <button class="tab" data-p="palmares">🏆 Palmarès</button>
+  <button class="tab" data-p="concours">🎁 Concours</button>
+  <button class="tab" data-p="plan">🗺️ Plan</button>
+  <button class="tab" data-p="cadre">🖼️ Cadre</button>
+  <button class="tab" data-p="qr">📱 QR Code</button>
 </div>
 
-<div class="tab-content active" id="tab-photos">
-  <div class="section">
-    <span class="section-label">Déposer vos photos</span>
-    <p class="note">👤 Indiquez votre prénom ci-dessous avant de glisser vos photos</p>
-    <div class="upload-zone" id="dropZone">
-      <span class="upload-icon">📷</span>
-      <div class="upload-cta">Appuyez pour choisir vos photos</div>
-      <div class="upload-hint">JPG · PNG · HEIC</div>
-      <label for="fileInput" style="display:inline-block;margin-top:14px;background:#C9A84C;color:#2C1F0E;padding:10px 28px;border-radius:2px;font-family:Jost,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">📂 Choisir mes photos</label>
-      <input type="file" id="fileInput" accept="image/*" multiple style="position:absolute;width:1px;height:1px;opacity:0;">
+<div class="page on" id="p-photos">
+  <div class="wrap">
+    <span class="lbl">Déposer vos photos</span>
+    <p class="note">👤 Indiquez votre prénom puis choisissez vos photos</p>
+    <div class="zone">
+      <span class="zone-icon">📷</span>
+      <div class="zone-txt">Vos plus beaux souvenirs</div>
+      <div class="zone-hint">JPG · PNG · HEIC</div>
+      <label for="fi" class="pick-btn">📂 Choisir mes photos</label>
+      <input type="file" id="fi" accept="image/*" multiple style="position:absolute;width:1px;height:1px;opacity:0;">
     </div>
     <div class="row">
-      <input type="text" class="input" id="guestName" placeholder="Votre prénom">
-      <select class="input" id="photoTag" style="flex:.6">
+      <input type="text" class="inp" id="gname" placeholder="Votre prénom">
+      <select class="inp" id="ptag" style="flex:.6">
         <option value="">📍 Moment</option>
         <option value="ceremonie">💒 Cérémonie</option>
         <option value="cocktail">🥂 Cocktail</option>
@@ -192,262 +166,217 @@ select.input{cursor:pointer;}
         <option value="danse">💃 Danse</option>
         <option value="portrait">🤳 Portrait</option>
       </select>
-      <button class="btn" id="uploadBtn" disabled>Partager</button>
     </div>
-    <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
-    <p class="status" id="statusMsg"></p>
+    <button class="btn" id="ubtn" disabled>Partager</button>
+    <div class="prog-wrap" id="pw"><div class="prog-bar" id="pb"></div></div>
+    <p class="status" id="stxt"></p>
+    <p class="fb-status" id="fbstatus">Connexion en cours…</p>
   </div>
-  <div class="gallery-wrap">
-    <div class="gallery-head">
-      <h2 class="gallery-title">La galerie</h2>
-      <span class="badge" id="countBadge">0 photo</span>
-      <button class="btn-outline" id="ssBtn" style="margin-left:auto">▶ Diaporama</button>
-      <button class="btn-outline" id="dlAllBtn">⬇ Tout télécharger</button>
+  <div class="gwrap">
+    <div class="ghead">
+      <h2 class="gtitle">La galerie</h2>
+      <span class="badge" id="gbadge">0 photo</span>
+      <button class="obtn" id="ssbtn" style="margin-left:auto">▶ Diaporama</button>
+      <button class="obtn" id="dlbtn">⬇ Tout télécharger</button>
     </div>
-    <div class="chip-bar" id="tagBar">
-      <button class="chip active" data-tag="all">Tous</button>
+    <div class="chips" id="tagchips">
+      <button class="chip on" data-tag="all">Tous</button>
       <button class="chip" data-tag="ceremonie">💒 Cérémonie</button>
       <button class="chip" data-tag="cocktail">🥂 Cocktail</button>
       <button class="chip" data-tag="repas">🍽️ Repas</button>
       <button class="chip" data-tag="danse">💃 Danse</button>
       <button class="chip" data-tag="portrait">🤳 Portrait</button>
     </div>
-    <div class="chip-bar" id="filterBar"><button class="chip active" data-filter="all">Tous les invités</button></div>
-    <div id="galleryLoader" class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="masonry" id="gallery"></div>
-    <div class="empty" id="emptyState" style="display:none">
+    <div class="chips" id="fchips"><button class="chip on" data-f="all">Tous les invités</button></div>
+    <div class="grid" id="gal"></div>
+    <div class="empty" id="emp">
       <div class="empty-icon">🌿</div>
-      <div class="empty-text">Les premiers souvenirs arrivent bientôt…</div>
+      <div class="empty-txt">Les premiers souvenirs arrivent bientôt…</div>
       <div class="empty-sub">Soyez le premier à partager votre photo</div>
     </div>
   </div>
 </div>
 
-<div class="tab-content" id="tab-voeux">
-  <div class="section">
-    <span class="section-label">Laissez un message</span>
-    <textarea class="input" id="voeuxText" placeholder="Écrivez vos vœux, une anecdote, un souvenir…" style="width:100%;min-height:110px;resize:vertical;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;padding:12px 14px;"></textarea>
-    <div class="row" style="margin-top:10px;">
-      <input type="text" class="input" id="voeuxName" placeholder="Votre prénom">
-      <button class="btn" id="voeuxBtn" disabled>Envoyer</button>
+<div class="page" id="p-voeux">
+  <div class="wrap">
+    <span class="lbl">Laissez un message</span>
+    <textarea class="inp" id="vtxt" placeholder="Vos vœux, une anecdote, un souvenir…" style="width:100%;min-height:100px;resize:vertical;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;padding:10px 12px;"></textarea>
+    <div class="row" style="margin-top:8px;">
+      <input type="text" class="inp" id="vname" placeholder="Votre prénom">
+      <button class="btn" id="vbtn" disabled style="width:auto;margin-top:0;">Envoyer</button>
     </div>
-    <div id="voeuxList" class="voeux-list"></div>
+    <div class="vlist" id="vlist"></div>
   </div>
 </div>
 
-<div class="tab-content" id="tab-palmares">
-  <div class="section">
-    <span class="section-label">Qui a partagé le plus ?</span>
-    <div id="lbList"></div>
+<div class="page" id="p-palmares">
+  <div class="wrap">
+    <span class="lbl">Qui a partagé le plus ?</span>
+    <div id="lblist"></div>
   </div>
 </div>
 
-<div class="tab-content" id="tab-concours">
-  <div class="section">
-    <div class="concours-header">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--or);margin-bottom:6px;">✦</div>
-      <h2 class="concours-title">La plus belle photo</h2>
-      <p class="concours-sub">Votez pour votre photo préférée<br>Le gagnant reçoit un cadeau surprise 🎁</p>
-      <div class="concours-deadline">Votes ouverts le 28 juin à 14h</div>
+<div class="page" id="p-concours">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--or);margin-bottom:6px;">✦</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:3px;">La plus belle photo</h2>
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-top:7px;line-height:1.6;">Votez pour votre photo préférée<br>Le gagnant reçoit un cadeau surprise 🎁</p>
+      <div style="display:inline-block;margin-top:12px;background:var(--brun);color:var(--or-pale);font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border-radius:2px;">Votes ouverts le 28 juin à 14h</div>
     </div>
-    <div class="concours-grid" id="concoursGrid"></div>
+    <div class="cgrid" id="cgrid"></div>
   </div>
 </div>
 
-<div class="tab-content" id="tab-plan">
-  <div class="section">
-    <span class="section-label">Carte du Domaine des Trois Grâces</span>
-    <div class="plan-wrap">
-      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#f0ebe0;">
-        <rect width="800" height="500" fill="#f0ebe0"/>
-        <rect x="350" y="0" width="50" height="500" fill="#e0d8c8"/>
-        <rect x="100" y="60" width="180" height="120" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
-        <text x="190" y="125" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Maison principale</text>
-        <rect x="480" y="60" width="220" height="140" fill="#ede7d9" stroke="#C9A84C" stroke-width="2" rx="3"/>
-        <text x="590" y="135" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Grange · Réception</text>
-        <ellipse cx="190" cy="320" rx="88" ry="54" fill="#c5e8f0" stroke="#C9A84C" stroke-width="1.5"/>
-        <text x="190" y="326" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Piscine &amp; Terrasse</text>
-        <rect x="480" y="280" width="140" height="90" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
-        <text x="550" y="330" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Institut Beauté</text>
-        <rect x="648" y="280" width="100" height="80" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
-        <text x="698" y="325" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Gîtes</text>
-        <circle cx="55" cy="55" r="16" fill="#c8dab0" opacity=".7"/>
-        <circle cx="745" cy="55" r="16" fill="#c8dab0" opacity=".7"/>
-        <circle cx="55" cy="445" r="16" fill="#c8dab0" opacity=".7"/>
-        <circle cx="745" cy="445" r="16" fill="#c8dab0" opacity=".7"/>
-      </svg>
+<div class="page" id="p-plan">
+  <div class="wrap">
+    <span class="lbl">Carte du Domaine des Trois Grâces</span>
+    <svg class="plan-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+      <rect width="800" height="500" fill="#f0ebe0"/>
+      <rect x="350" y="0" width="50" height="500" fill="#e0d8c8"/>
+      <rect x="100" y="60" width="180" height="120" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
+      <text x="190" y="125" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Maison principale</text>
+      <rect x="480" y="60" width="220" height="140" fill="#ede7d9" stroke="#C9A84C" stroke-width="2" rx="3"/>
+      <text x="590" y="135" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Grange · Réception</text>
+      <ellipse cx="190" cy="320" rx="88" ry="54" fill="#c5e8f0" stroke="#C9A84C" stroke-width="1.5"/>
+      <text x="190" y="326" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Piscine &amp; Terrasse</text>
+      <rect x="480" y="280" width="140" height="90" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
+      <text x="550" y="330" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Institut Beauté</text>
+      <rect x="648" y="280" width="100" height="80" fill="#ede7d9" stroke="#C9A84C" stroke-width="1.5" rx="3"/>
+      <text x="698" y="325" font-family="serif" font-size="13" fill="#2C1F0E" text-anchor="middle" font-style="italic">Gîtes</text>
+      <circle cx="55" cy="55" r="16" fill="#c8dab0" opacity=".7"/>
+      <circle cx="745" cy="55" r="16" fill="#c8dab0" opacity=".7"/>
+      <circle cx="55" cy="445" r="16" fill="#c8dab0" opacity=".7"/>
+      <circle cx="745" cy="445" r="16" fill="#c8dab0" opacity=".7"/>
+    </svg>
+  </div>
+</div>
+
+<div class="page" id="p-cadre">
+  <div class="wrap" style="text-align:center;">
+    <span class="lbl">Cadre souvenir</span>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">Encadrez votre photo aux couleurs du mariage</p>
+    <div class="fzone" id="fzone">
+      <input type="file" id="ff" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;">
+      <span style="font-size:26px;display:block;margin-bottom:6px;">🖼️</span>
+      <label for="ff" style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gris);cursor:pointer;">Choisir une photo</label>
+    </div>
+    <canvas id="fc" style="display:none;max-width:100%;margin-top:14px;border-radius:3px;"></canvas>
+    <div id="fa" style="display:none;margin-top:12px;">
+      <button class="btn" id="fdl">⬇ Télécharger mon souvenir</button>
+      <a id="swa" href="#" target="_blank" class="obtn" style="display:block;margin-top:8px;text-align:center;">💬 Partager sur WhatsApp</a>
     </div>
   </div>
 </div>
 
-<div class="tab-content" id="tab-cadre">
-  <div class="section" style="text-align:center;">
-    <span class="section-label">Cadre souvenir</span>
-    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gris);margin-bottom:18px;">Encadrez votre photo aux couleurs du mariage</p>
-    <div class="frame-zone" id="frameZone">
-      <input type="file" id="frameFile" accept="image/*" style="display:none">
-      <span style="font-size:28px;display:block;margin-bottom:8px;">🖼️</span>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gris);">Choisir une photo</div>
+<div class="page" id="p-qr">
+  <div class="wrap" style="text-align:center;">
+    <span class="lbl">QR Code de l'application</span>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">À imprimer et déposer sur les tables</p>
+    <div class="qbox">
+      <canvas id="qrc"></canvas>
+      <div class="qurl">https://homerenovdeco-a11y.github.io/-mariage-photos/</div>
     </div>
-    <canvas id="frameCanvas" style="display:none;max-width:100%;margin-top:16px;border-radius:3px;"></canvas>
-    <div id="frameActions" style="display:none;margin-top:14px;">
-      <button class="btn" id="frameDownload" style="width:100%;">⬇ Télécharger mon souvenir</button>
-      <a id="shareWa" href="#" target="_blank" style="display:block;margin-top:10px;" class="btn-outline">💬 Partager sur WhatsApp</a>
-    </div>
-  </div>
-</div>
-
-<div class="tab-content" id="tab-qr">
-  <div class="section" style="text-align:center;">
-    <span class="section-label">QR Code de l'application</span>
-    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gris);margin-bottom:18px;">À imprimer et déposer sur les tables</p>
-    <div class="qr-box">
-      <canvas id="qrCanvas"></canvas>
-      <div class="qr-url">https://homerenovdeco-a11y.github.io/-mariage-photos/</div>
-    </div>
-    <button class="btn" id="qrDl" style="width:100%;margin-top:14px;">⬇ Télécharger le QR code</button>
-    <a href="https://wa.me/?text=https%3A%2F%2Fhomerenovdeco-a11y.github.io%2F-mariage-photos%2F" target="_blank" class="btn-outline" style="display:block;margin-top:10px;">💬 Partager sur WhatsApp</a>
+    <button class="btn" id="qrdl" style="margin-top:12px;">⬇ Télécharger le QR code</button>
+    <a href="https://wa.me/?text=https%3A%2F%2Fhomerenovdeco-a11y.github.io%2F-mariage-photos%2F" target="_blank" class="obtn" style="display:block;margin-top:8px;text-align:center;">💬 Partager sur WhatsApp</a>
   </div>
 </div>
 
 <div class="lb" id="lb">
-  <div class="lb-inner">
-    <button class="lb-close" id="lbClose">✕</button>
-    <img id="lbImg" src="" alt="">
+  <div class="lb-in">
+    <button class="lb-x" id="lbx">✕</button>
+    <img id="lbimg" src="" alt="">
     <div class="lb-info">
-      <div class="lb-author" id="lbAuthor"></div>
-      <a id="lbDl" class="btn-outline" target="_blank">⬇ Télécharger</a>
+      <div class="lb-author" id="lbauth"></div>
+      <a id="lbdl" class="obtn" target="_blank">⬇</a>
     </div>
   </div>
 </div>
 
-<div class="ss-overlay" id="ssOverlay">
-  <button class="ss-close" id="ssClose">✕</button>
-  <img id="ssImg" src="" alt="">
-  <div class="ss-info" id="ssInfo"></div>
-  <div class="ss-progress" id="ssProgress"></div>
+<div style="display:none;position:fixed;inset:0;background:rgba(20,12,4,.97);z-index:150;flex-direction:column;align-items:center;justify-content:center;" id="ss">
+  <button style="position:absolute;top:16px;right:16px;background:var(--or);border:none;color:var(--brun);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;" id="ssx">✕</button>
+  <img id="ssimg" src="" alt="" style="max-width:90vw;max-height:78vh;object-fit:contain;">
+  <div id="ssinf" style="color:var(--or-pale);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;margin-top:12px;"></div>
+  <div id="ssprog" style="position:absolute;bottom:0;left:0;height:2px;background:var(--or);transition:width .1s linear;"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
 <script>
-// ── FIREBASE INIT (différé) ──
-function initFirebase() {
-  if (typeof firebase === 'undefined') {
-    setTimeout(initFirebase, 500);
-    return;
-  }
-var firebaseConfig = {
-  apiKey: "AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
-  authDomain: "mariage-solene-seb.firebaseapp.com",
-  databaseURL: "https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mariage-solene-seb",
-  storageBucket: "mariage-solene-seb.firebasestorage.app",
-  messagingSenderId: "391409891585",
-  appId: "1:391409891585:web:db1454ffdf07f401d14300"
-};
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
-var photosRef = db.ref('photos');
-var voeuxRef = db.ref('voeux');
-
-// ── STATE ──
-var photos = [], voeux = [], hearts = {}, pending = [], activeTag = 'all', activeFilter = 'all';
-try { hearts = JSON.parse(localStorage.getItem('ss_hearts') || '{}'); } catch(e){}
-function saveHearts() { try { localStorage.setItem('ss_hearts', JSON.stringify(hearts)); } catch(e){} }
-
 // ── COUNTDOWN ──
-function tick() {
-  var t = new Date('2026-06-27T14:00:00') - new Date();
-  if (t <= 0) { document.getElementById('countdown').innerHTML = '<div style="text-align:center;font-family:Cormorant Garamond,serif;font-style:italic;font-size:22px;color:#E8D5A3;padding:20px;">✨ C'est le grand jour ! ✨</div>'; return; }
-  document.getElementById('cdJ').textContent = String(Math.floor(t/86400000)).padStart(2,'0');
-  document.getElementById('cdH').textContent = String(Math.floor(t%86400000/3600000)).padStart(2,'0');
-  document.getElementById('cdM').textContent = String(Math.floor(t%3600000/60000)).padStart(2,'0');
-  document.getElementById('cdS').textContent = String(Math.floor(t%60000/1000)).padStart(2,'0');
+function tick(){
+  var d=new Date('2026-06-27T14:00:00')-new Date();
+  if(d<=0){document.getElementById('cd').innerHTML='<div style="text-align:center;font-family:serif;font-style:italic;font-size:20px;color:#E8D5A3;padding:16px;">✨ C'est le grand jour ! ✨</div>';return;}
+  document.getElementById('cdJ').textContent=String(Math.floor(d/86400000)).padStart(2,'0');
+  document.getElementById('cdH').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cdM').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');
+  document.getElementById('cdS').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0');
 }
-tick(); setInterval(tick, 1000);
-
-// ── STARS ──
-var sc = document.getElementById('stars'), sx = sc.getContext('2d'), stars = [];
-function initStars() {
-  sc.width = window.innerWidth; sc.height = window.innerHeight;
-  stars = [];
-  for(var i=0;i<50;i++) stars.push({x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.4+.3,vy:Math.random()*.25+.08});
-}
-function drawStars() {
-  sx.clearRect(0,0,sc.width,sc.height);
-  stars.forEach(function(s){
-    sx.beginPath(); sx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    sx.fillStyle='rgba(201,168,76,'+(0.3+0.6*Math.abs(Math.sin(Date.now()/2000+s.x)))+')';
-    sx.fill();
-    s.y+=s.vy; if(s.y>sc.height){s.y=0;s.x=Math.random()*sc.width;}
-  });
-  requestAnimationFrame(drawStars);
-}
-window.addEventListener('resize',initStars); initStars(); drawStars();
+tick();setInterval(tick,1000);
 
 // ── TABS ──
-document.querySelectorAll('.tab-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-    document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
-    btn.classList.add('active');
-    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
-    if(btn.dataset.tab==='palmares') renderPalmares();
-    if(btn.dataset.tab==='concours') renderConcours();
-    if(btn.dataset.tab==='qr') renderQR();
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
+    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('on');});
+    t.classList.add('on');
+    document.getElementById('p-'+t.dataset.p).classList.add('on');
+    if(t.dataset.p==='palmares')rPalmares();
+    if(t.dataset.p==='concours')rConcours();
+    if(t.dataset.p==='qr')rQR();
   });
 });
 
+// ── STATE ──
+var photos=[],voeux=[],hearts={},pending=[],atag='all',aflt='all';
+try{hearts=JSON.parse(localStorage.getItem('ss_h')||'{}');}catch(e){}
+function sH(){try{localStorage.setItem('ss_h',JSON.stringify(hearts));}catch(e){}}
+
 // ── UPLOAD ──
-var dropZone=document.getElementById('dropZone');
-var fileInput=document.getElementById('fileInput');
-var uploadBtn=document.getElementById('uploadBtn');
-var guestName=document.getElementById('guestName');
+document.getElementById('fi').addEventListener('change',function(e){
+  pending=Array.from(e.target.files).filter(function(f){return f.type.startsWith('image/');});
+  setS(pending.length?pending.length+' photo'+(pending.length>1?'s':'')+' prête'+(pending.length>1?'s':''):'');
+  chkU();
+});
+document.getElementById('gname').addEventListener('input',chkU);
+function chkU(){document.getElementById('ubtn').disabled=!(pending.length&&document.getElementById('gname').value.trim());}
+function setS(m){document.getElementById('stxt').textContent=m;}
 
-dropZone.addEventListener('click',function(){fileInput.click();});
-fileInput.addEventListener('change',function(e){setPending(e.target.files);});
-dropZone.addEventListener('dragover',function(e){e.preventDefault();dropZone.classList.add('over');});
-dropZone.addEventListener('dragleave',function(){dropZone.classList.remove('over');});
-dropZone.addEventListener('drop',function(e){e.preventDefault();dropZone.classList.remove('over');setPending(e.dataTransfer.files);});
-
-function setPending(files){
-  pending=Array.from(files).filter(function(f){return f.type.startsWith('image/');});
-  setStatus(pending.length?pending.length+' photo'+(pending.length>1?'s':'')+' prête'+(pending.length>1?'s':''):'Aucune image');
-  checkReady();
-}
-guestName.addEventListener('input',checkReady);
-function checkReady(){uploadBtn.disabled=!(pending.length&&guestName.value.trim());}
-function setStatus(m){document.getElementById('statusMsg').textContent=m;}
-
-uploadBtn.addEventListener('click',function(){
-  var name=guestName.value.trim();
+document.getElementById('ubtn').addEventListener('click',function(){
+  var name=document.getElementById('gname').value.trim();
   if(!pending.length||!name)return;
-  uploadBtn.disabled=true;
-  document.getElementById('progressWrap').style.display='block';
-  var pb=document.getElementById('progressBar');
-  var i=0;
+  document.getElementById('ubtn').disabled=true;
+  document.getElementById('pw').style.display='block';
+  var pb=document.getElementById('pb'),i=0;
   function next(){
     if(i>=pending.length){
       pb.style.width='100%';
-      setStatus('✓ '+pending.length+' souvenir'+(pending.length>1?'s':'')+' partagé'+(pending.length>1?'s':'')+' !');
-      pending=[];fileInput.value='';guestName.value='';checkReady();
-      setTimeout(function(){document.getElementById('progressWrap').style.display='none';pb.style.width='0';setStatus('');},2500);
+      setS('✓ '+pending.length+' souvenir'+(pending.length>1?'s':'')+' partagé'+(pending.length>1?'s':'')+' !');
+      // Save to Firebase if available, else local
+      pending=[];document.getElementById('fi').value='';document.getElementById('gname').value='';chkU();
+      setTimeout(function(){document.getElementById('pw').style.display='none';pb.style.width='0';setS('');},2500);
       return;
     }
-    setStatus('Compression '+(i+1)+'/'+pending.length+'…');
+    setS('Compression '+(i+1)+'/'+pending.length+'…');
     compress(pending[i],1200,.78,function(b64){
       pb.style.width=((i+.5)/pending.length*100)+'%';
-      setStatus('Envoi '+(i+1)+'/'+pending.length+'…');
-      var tag=document.getElementById('photoTag').value;
-      photosRef.push({
-        author:name,url:b64,tag:tag,
-        time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'}),
-        ts:firebase.database.ServerValue.TIMESTAMP
-      }).then(function(){
+      var tag=document.getElementById('ptag').value;
+      var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
+      // Try Firebase first
+      if(window.fbRef){
+        window.fbRef.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:Date.now()}).then(function(ref){
+          p.id=ref.key;
+          pb.style.width=((i+1)/pending.length*100)+'%';
+          i++;next();
+        }).catch(function(){
+          photos.unshift(p);rGallery();
+          pb.style.width=((i+1)/pending.length*100)+'%';
+          i++;next();
+        });
+      } else {
+        photos.unshift(p);rGallery();
         pb.style.width=((i+1)/pending.length*100)+'%';
         i++;next();
-      });
+      }
     });
   }
   next();
@@ -460,201 +389,228 @@ function compress(file,max,q,cb){
     if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
     var c=document.createElement('canvas');c.width=w;c.height=h;
     c.getContext('2d').drawImage(img,0,0,w,h);
-    URL.revokeObjectURL(url);
-    cb(c.toDataURL('image/jpeg',q));
+    URL.revokeObjectURL(url);cb(c.toDataURL('image/jpeg',q));
   };
   img.src=url;
 }
 
-// ── FIREBASE LISTENERS ──
-photosRef.on('value',function(snap){
-  document.getElementById('galleryLoader').style.display='none';
-  photos=[];
-  if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
-  renderGallery();
-});
-voeuxRef.on('value',function(snap){
-  voeux=[];
-  if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
-  renderVoeux();
-});
+// ── FIREBASE (chargé séparément, non bloquant) ──
+function loadFirebase(){
+  var s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+  s1.onload=function(){
+    var s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js';
+    s2.onload=function(){
+      try{
+        firebase.initializeApp({
+          apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
+          authDomain:"mariage-solene-seb.firebaseapp.com",
+          databaseURL:"https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId:"mariage-solene-seb",
+          storageBucket:"mariage-solene-seb.firebasestorage.app",
+          messagingSenderId:"391409891585",
+          appId:"1:391409891585:web:db1454ffdf07f401d14300"
+        });
+        var db=firebase.database();
+        window.fbRef=db.ref('photos');
+        window.fbVRef=db.ref('voeux');
+        document.getElementById('fbstatus').textContent='✅ Connecté — photos partagées en temps réel';
+        setTimeout(function(){document.getElementById('fbstatus').style.display='none';},3000);
+        // Listen photos
+        window.fbRef.on('value',function(snap){
+          photos=[];
+          if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
+          rGallery();
+        });
+        // Listen voeux
+        window.fbVRef.on('value',function(snap){
+          voeux=[];
+          if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
+          rVoeux();
+        });
+        // Voeux submit
+        document.getElementById('vbtn').addEventListener('click',function(){
+          var t=document.getElementById('vtxt').value.trim(),n=document.getElementById('vname').value.trim();
+          if(!t||!n)return;
+          window.fbVRef.push({author:n,text:t,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})});
+          document.getElementById('vtxt').value='';document.getElementById('vname').value='';
+          document.getElementById('vbtn').disabled=true;
+        });
+      }catch(e){
+        document.getElementById('fbstatus').textContent='⚠️ Mode local (photos non partagées)';
+      }
+    };
+    document.head.appendChild(s2);
+  };
+  s1.onerror=function(){
+    document.getElementById('fbstatus').textContent='⚠️ Mode local (pas de connexion)';
+  };
+  document.head.appendChild(s1);
+}
+// Load Firebase after page is ready
+setTimeout(loadFirebase,500);
 
-// Voeux
-} // end initFirebase
-setTimeout(initFirebase, 100);
-
-document.getElementById('voeuxText').addEventListener('input',checkVoeux);
-document.getElementById('voeuxName').addEventListener('input',checkVoeux);
-function checkVoeux(){document.getElementById('voeuxBtn').disabled=!(document.getElementById('voeuxText').value.trim()&&document.getElementById('voeuxName').value.trim());}
-document.getElementById('voeuxBtn').addEventListener('click',function(){
-  var text=document.getElementById('voeuxText').value.trim();
-  var name=document.getElementById('voeuxName').value.trim();
-  if(!text||!name)return;
-  voeuxRef.push({author:name,text:text,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})});
-  document.getElementById('voeuxText').value='';
-  document.getElementById('voeuxName').value='';
-  document.getElementById('voeuxBtn').disabled=true;
-});
+// Voeux input check
+document.getElementById('vtxt').addEventListener('input',cV);
+document.getElementById('vname').addEventListener('input',cV);
+function cV(){document.getElementById('vbtn').disabled=!(document.getElementById('vtxt').value.trim()&&document.getElementById('vname').value.trim());}
 
 // ── GALLERY ──
-function renderGallery(){
+function rGallery(){
   var authors=[...new Set(photos.map(function(p){return p.author;}))];
-  var fb=document.getElementById('filterBar');
-  fb.innerHTML='<button class="chip '+(activeFilter==='all'?'active':'')+'" data-filter="all">Tous les invités</button>';
+  var fc=document.getElementById('fchips');
+  fc.innerHTML='<button class="chip'+(aflt==='all'?' on':'')+'" data-f="all">Tous les invités</button>';
   authors.forEach(function(a){
     var b=document.createElement('button');
-    b.className='chip'+(activeFilter===a?' active':'');
-    b.dataset.filter=a;b.textContent=a;fb.appendChild(b);
+    b.className='chip'+(aflt===a?' on':'');b.dataset.f=a;b.textContent=a;fc.appendChild(b);
   });
-  fb.querySelectorAll('.chip').forEach(function(b){b.addEventListener('click',function(){activeFilter=b.dataset.filter;renderGallery();});});
-  document.getElementById('tagBar').querySelectorAll('.chip').forEach(function(b){
+  fc.querySelectorAll('.chip').forEach(function(b){b.addEventListener('click',function(){aflt=b.dataset.f;rGallery();});});
+  document.getElementById('tagchips').querySelectorAll('.chip').forEach(function(b){
     b.addEventListener('click',function(){
-      activeTag=b.dataset.tag;
-      document.querySelectorAll('#tagBar .chip').forEach(function(x){x.classList.remove('active');});
-      b.classList.add('active');renderGallery();
+      atag=b.dataset.tag;
+      document.querySelectorAll('#tagchips .chip').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');rGallery();
     });
   });
-  var filtered=photos.slice();
-  if(activeFilter!=='all')filtered=filtered.filter(function(p){return p.author===activeFilter;});
-  if(activeTag!=='all')filtered=filtered.filter(function(p){return p.tag===activeTag;});
-  document.getElementById('countBadge').textContent=photos.length+(photos.length>1?' photos':' photo');
-  document.getElementById('emptyState').style.display=photos.length?'none':'block';
-  var g=document.getElementById('gallery');g.innerHTML='';
-  filtered.forEach(function(photo){
-    var card=document.createElement('div');card.className='photo-card';
-    var loved=hearts[photo.id];
-    card.innerHTML='<img src="'+photo.url+'" alt="'+photo.author+'" loading="lazy"><button class="heart-btn'+(loved?' on':'')+'">'+( loved?'❤️':'🤍')+'</button><div class="photo-meta"><div class="photo-author">'+photo.author+'</div><div class="photo-time">'+photo.time+'</div></div>';
-    card.querySelector('img').addEventListener('click',function(){openLB(photo);});
-    card.querySelector('.heart-btn').addEventListener('click',function(e){
-      e.stopPropagation();
-      hearts[photo.id]=!hearts[photo.id];
-      e.currentTarget.textContent=hearts[photo.id]?'❤️':'🤍';
-      e.currentTarget.classList.toggle('on',hearts[photo.id]);
-      saveHearts();
+  var fl=photos.slice();
+  if(aflt!=='all')fl=fl.filter(function(p){return p.author===aflt;});
+  if(atag!=='all')fl=fl.filter(function(p){return p.tag===atag;});
+  document.getElementById('gbadge').textContent=photos.length+(photos.length>1?' photos':' photo');
+  document.getElementById('emp').style.display=photos.length?'none':'block';
+  var g=document.getElementById('gal');g.innerHTML='';
+  fl.forEach(function(p){
+    var c=document.createElement('div');c.className='card';
+    var lv=hearts[p.id];
+    c.innerHTML='<img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><button class="hbtn'+(lv?' on':'')+'">'+( lv?'❤️':'🤍')+'</button><div class="card-meta"><div class="card-author">'+p.author+'</div><div class="card-time">'+p.time+'</div></div>';
+    c.querySelector('img').addEventListener('click',function(){oLB(p);});
+    c.querySelector('.hbtn').addEventListener('click',function(e){
+      e.stopPropagation();hearts[p.id]=!hearts[p.id];
+      e.currentTarget.textContent=hearts[p.id]?'❤️':'🤍';
+      e.currentTarget.classList.toggle('on',hearts[p.id]);sH();
     });
-    g.appendChild(card);
+    g.appendChild(c);
   });
 }
-function renderVoeux(){
-  var list=document.getElementById('voeuxList');
-  if(!voeux.length){list.innerHTML='<div class="empty"><div class="empty-icon">💌</div><div class="empty-text">Soyez le premier à écrire…</div></div>';return;}
-  list.innerHTML=voeux.map(function(v){return '<div class="voeu-card"><div class="voeu-text">"'+v.text+'"</div><div class="voeu-author">— '+v.author+' · '+v.time+'</div></div>';}).join('');
+
+function rVoeux(){
+  var l=document.getElementById('vlist');
+  if(!voeux.length){l.innerHTML='<div class="empty"><div class="empty-icon">💌</div><div class="empty-txt">Soyez le premier à écrire…</div></div>';return;}
+  l.innerHTML=voeux.map(function(v){return '<div class="vcard"><div class="vtxt">"'+v.text+'"</div><div class="vauth">— '+v.author+' · '+v.time+'</div></div>';}).join('');
 }
-function renderPalmares(){
-  var counts={};
-  photos.forEach(function(p){counts[p.author]=(counts[p.author]||0)+1;});
-  var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1];});
-  var max=sorted.length?sorted[0][1]:1;
-  var medals=['🥇','🥈','🥉'];
-  document.getElementById('lbList').innerHTML=sorted.length
-    ?sorted.map(function(e,i){return '<div class="lb-row"><div class="lb-rank">'+(medals[i]||i+1)+'</div><div class="lb-name">'+e[0]+'</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:'+(e[1]/max*100)+'%"></div></div><div class="lb-count">'+e[1]+' photo'+(e[1]>1?'s':'')+'</div></div>';}).join('')
-    :'<div class="empty"><div class="empty-text">Aucune photo encore</div></div>';
+
+function rPalmares(){
+  var cnt={};photos.forEach(function(p){cnt[p.author]=(cnt[p.author]||0)+1;});
+  var s=Object.entries(cnt).sort(function(a,b){return b[1]-a[1];});
+  var mx=s.length?s[0][1]:1,md=['🥇','🥈','🥉'];
+  document.getElementById('lblist').innerHTML=s.length
+    ?s.map(function(e,i){return '<div class="lbrow"><div class="lbrank">'+(md[i]||i+1)+'</div><div class="lbname">'+e[0]+'</div><div class="lbbar-w"><div class="lbbar" style="width:'+(e[1]/mx*100)+'%"></div></div><div class="lbcnt">'+e[1]+' photo'+(e[1]>1?'s':'')+'</div></div>';}).join('')
+    :'<div class="empty"><div class="empty-txt">Aucune photo encore</div></div>';
 }
-function renderConcours(){
-  var votes=JSON.parse(localStorage.getItem('ss_cvotes')||'{}');
-  var myVote=localStorage.getItem('ss_vote')||null;
-  var closed=new Date()>new Date('2026-06-28T14:00:00');
-  var total=Object.values(votes).reduce(function(s,x){return s+x;},0);
-  var max=Math.max.apply(null,Object.values(votes).concat([1]));
-  var g=document.getElementById('concoursGrid');
-  if(!photos.length){g.innerHTML='<div class="empty"><div class="empty-text">Les photos arrivent bientôt…</div></div>';return;}
+
+function rConcours(){
+  var vt=JSON.parse(localStorage.getItem('ss_cv')||'{}');
+  var mv=localStorage.getItem('ss_mv')||null;
+  var cl=new Date()>new Date('2026-06-28T14:00:00');
+  var tot=Object.values(vt).reduce(function(s,x){return s+x;},0);
+  var mx=Math.max.apply(null,Object.values(vt).concat([1]));
+  var g=document.getElementById('cgrid');
+  if(!photos.length){g.innerHTML='<div class="empty"><div class="empty-txt">Les photos arrivent bientôt…</div></div>';return;}
   g.innerHTML=photos.map(function(p){
-    var v=votes[p.id]||0,pct=total>0?v/max*100:0,isM=myVote===p.id;
-    return '<div class="c-card"><img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><div class="c-card-info"><div class="c-author">'+p.author+'</div><div class="c-votes">'+(myVote||closed?v+' vote'+(v>1?'s':''):'')+'</div></div>'
-      +(myVote||closed?'<div class="c-bar-wrap"><div class="c-bar" style="width:'+pct+'%"></div></div>':'')
-      +(!closed?'<button class="vote-btn'+(isM?' voted':'')+(myVote&&!isM?' disabled':'')+'" data-id="'+p.id+'"'+(myVote&&!isM?' disabled':'')+'>'+( isM?'✓ Mon vote':'⭐ Voter')+'</button>':'')
+    var v=vt[p.id]||0,pct=tot>0?v/mx*100:0,iM=mv===p.id;
+    return '<div class="ccard"><img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><div class="cinfo"><div class="cauth">'+p.author+'</div><div class="cvotes">'+(mv||cl?v+' vote'+(v>1?'s':''):'')+'</div></div>'
+      +(mv||cl?'<div class="cbar-w"><div class="cbar" style="width:'+pct+'%"></div></div>':'')
+      +(!cl?'<button class="vbtn'+(iM?' voted':'')+(mv&&!iM?' disabled':'')+'" data-id="'+p.id+'"'+(mv&&!iM?' disabled':'')+'>'+( iM?'✓ Mon vote':'⭐ Voter')+'</button>':'')
       +'</div>';
   }).join('');
-  if(!closed){
-    g.querySelectorAll('.vote-btn:not([disabled])').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var votes=JSON.parse(localStorage.getItem('ss_cvotes')||'{}');
-        votes[btn.dataset.id]=(votes[btn.dataset.id]||0)+1;
-        localStorage.setItem('ss_cvotes',JSON.stringify(votes));
-        localStorage.setItem('ss_vote',btn.dataset.id);
-        renderConcours();
+  if(!cl){
+    g.querySelectorAll('.vbtn:not([disabled])').forEach(function(b){
+      b.addEventListener('click',function(){
+        var vt=JSON.parse(localStorage.getItem('ss_cv')||'{}');
+        vt[b.dataset.id]=(vt[b.dataset.id]||0)+1;
+        localStorage.setItem('ss_cv',JSON.stringify(vt));
+        localStorage.setItem('ss_mv',b.dataset.id);
+        rConcours();
       });
     });
   }
 }
-function renderQR(){
+
+function rQR(){
   if(typeof QRCode!=='undefined'){
-    QRCode.toCanvas(document.getElementById('qrCanvas'),'https://homerenovdeco-a11y.github.io/-mariage-photos/',{width:220,margin:2,color:{dark:'#2C1F0E',light:'#ffffff'}});
+    QRCode.toCanvas(document.getElementById('qrc'),'https://homerenovdeco-a11y.github.io/-mariage-photos/',{width:200,margin:2,color:{dark:'#2C1F0E',light:'#ffffff'}});
   }
 }
-document.getElementById('qrDl').addEventListener('click',function(){
-  renderQR();
-  setTimeout(function(){var a=document.createElement('a');a.download='qr-mariage.png';a.href=document.getElementById('qrCanvas').toDataURL();a.click();},300);
-});
-setTimeout(renderQR,500);
+setTimeout(rQR,1000);
 
 // ── LIGHTBOX ──
-function openLB(photo){
-  document.getElementById('lbImg').src=photo.url;
-  document.getElementById('lbAuthor').textContent=photo.author+' · '+photo.time;
-  document.getElementById('lbDl').href=photo.url;
-  document.getElementById('lb').classList.add('open');
+function oLB(p){
+  document.getElementById('lbimg').src=p.url;
+  document.getElementById('lbauth').textContent=p.author+' · '+p.time;
+  document.getElementById('lbdl').href=p.url;
+  document.getElementById('lb').classList.add('on');
 }
-document.getElementById('lbClose').addEventListener('click',function(){document.getElementById('lb').classList.remove('open');});
-document.getElementById('lb').addEventListener('click',function(e){if(e.target===document.getElementById('lb'))document.getElementById('lb').classList.remove('open');});
+document.getElementById('lbx').addEventListener('click',function(){document.getElementById('lb').classList.remove('on');});
+document.getElementById('lb').addEventListener('click',function(e){if(e.target===document.getElementById('lb'))document.getElementById('lb').classList.remove('on');});
 
 // ── SLIDESHOW ──
-var ssTimer,ssIdx=0;
-document.getElementById('ssBtn').addEventListener('click',function(){if(!photos.length)return;ssIdx=0;document.getElementById('ssOverlay').classList.add('open');showSlide();});
-document.getElementById('ssClose').addEventListener('click',function(){clearTimeout(ssTimer);document.getElementById('ssOverlay').classList.remove('open');});
-function showSlide(){
-  var p=photos[ssIdx%photos.length];
-  document.getElementById('ssImg').src=p.url;
-  document.getElementById('ssInfo').textContent=p.author+' · '+p.time;
-  var prog=document.getElementById('ssProgress');
-  prog.style.transition='none';prog.style.width='0';
-  setTimeout(function(){prog.style.transition='width 4s linear';prog.style.width='100%';},50);
-  ssTimer=setTimeout(function(){ssIdx++;showSlide();},4000);
+var ssT,ssI=0;
+document.getElementById('ssbtn').addEventListener('click',function(){if(!photos.length)return;ssI=0;document.getElementById('ss').style.display='flex';ssSlide();});
+document.getElementById('ssx').addEventListener('click',function(){clearTimeout(ssT);document.getElementById('ss').style.display='none';});
+function ssSlide(){
+  var p=photos[ssI%photos.length];
+  document.getElementById('ssimg').src=p.url;
+  document.getElementById('ssinf').textContent=p.author+' · '+p.time;
+  var pr=document.getElementById('ssprog');pr.style.transition='none';pr.style.width='0';
+  setTimeout(function(){pr.style.transition='width 4s linear';pr.style.width='100%';},50);
+  ssT=setTimeout(function(){ssI++;ssSlide();},4000);
 }
 
 // ── DOWNLOAD ALL ──
-document.getElementById('dlAllBtn').addEventListener('click',function(){
+document.getElementById('dlbtn').addEventListener('click',function(){
   photos.forEach(function(p,i){setTimeout(function(){var a=document.createElement('a');a.href=p.url;a.download='mariage-'+p.author+'-'+i+'.jpg';a.click();},i*400);});
 });
 
 // ── CADRE ──
-document.getElementById('frameZone').addEventListener('click',function(){document.getElementById('frameFile').click();});
-document.getElementById('frameFile').addEventListener('change',function(e){if(e.target.files[0])drawFrame(e.target.files[0]);});
-function drawFrame(file){
-  var reader=new FileReader();
-  reader.onload=function(ev){
+document.getElementById('ff').addEventListener('change',function(e){if(e.target.files[0])drawF(e.target.files[0]);});
+function drawF(file){
+  var r=new FileReader();
+  r.onload=function(ev){
     var img=new Image();
     img.onload=function(){
-      var canvas=document.getElementById('frameCanvas');
-      canvas.style.display='block';
-      document.getElementById('frameActions').style.display='block';
-      var S=800,B=36;canvas.width=canvas.height=S;
-      var ctx=canvas.getContext('2d');
-      ctx.fillStyle='#FDFAF6';ctx.fillRect(0,0,S,S);
-      ctx.strokeStyle='#C9A84C';ctx.lineWidth=2.5;ctx.strokeRect(B/2,B/2,S-B,S-B);
-      ctx.strokeStyle='#E8D5A3';ctx.lineWidth=1;ctx.strokeRect(B/2+8,B/2+8,S-B-16,S-B-16);
-      ctx.fillStyle='#2C1F0E';ctx.textAlign='center';ctx.font='italic 300 28px serif';
-      ctx.fillText('Mariage Solène & Sébastien',S/2,B+18);
-      var ps=S-B*2-60,sx2=Math.max(0,(img.width-img.height)/2),sy2=Math.max(0,(img.height-img.width)/2),ss=Math.min(img.width,img.height);
-      ctx.drawImage(img,sx2,sy2,ss,ss,B+22,B+46,ps,ps);
-      ctx.fillStyle='#2C1F0E';ctx.font='italic 300 28px serif';
-      ctx.fillText('27 · 06 · 2026',S/2,S-B+8);
-      ctx.fillStyle='#C9A84C';ctx.font='14px serif';
-      [[10,14],[S-10,14],[10,S-6],[S-10,S-6]].forEach(function(pos){ctx.textAlign='center';ctx.fillText('✦',pos[0],pos[1]);});
-      document.getElementById('shareWa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage Solène & Sébastien 💛
+      var cv=document.getElementById('fc');cv.style.display='block';
+      document.getElementById('fa').style.display='block';
+      var S=800,B=36;cv.width=cv.height=S;
+      var c=cv.getContext('2d');
+      c.fillStyle='#FDFAF6';c.fillRect(0,0,S,S);
+      c.strokeStyle='#C9A84C';c.lineWidth=2.5;c.strokeRect(B/2,B/2,S-B,S-B);
+      c.strokeStyle='#E8D5A3';c.lineWidth=1;c.strokeRect(B/2+8,B/2+8,S-B-16,S-B-16);
+      c.fillStyle='#2C1F0E';c.textAlign='center';c.font='italic 300 28px serif';
+      c.fillText('Mariage Solène & Sébastien',S/2,B+18);
+      var ps=S-B*2-60,sx=Math.max(0,(img.width-img.height)/2),sy=Math.max(0,(img.height-img.width)/2),ss=Math.min(img.width,img.height);
+      c.drawImage(img,sx,sy,ss,ss,B+22,B+46,ps,ps);
+      c.fillStyle='#2C1F0E';c.font='italic 300 28px serif';
+      c.fillText('27 · 06 · 2026',S/2,S-B+8);
+      c.fillStyle='#C9A84C';c.font='14px serif';
+      [[10,14],[S-10,14],[10,S-6],[S-10,S-6]].forEach(function(p){c.textAlign='center';c.fillText('✦',p[0],p[1]);});
+      document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir 💛
 https://homerenovdeco-a11y.github.io/-mariage-photos/');
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
+    };img.src=ev.target.result;
+  };r.readAsDataURL(file);
 }
-document.getElementById('frameDownload').addEventListener('click',function(){
-  var a=document.createElement('a');a.download='souvenir-mariage-ss.jpg';a.href=document.getElementById('frameCanvas').toDataURL('image/jpeg',.92);a.click();
+document.getElementById('fdl').addEventListener('click',function(){
+  var a=document.createElement('a');a.download='souvenir-ss.jpg';a.href=document.getElementById('fc').toDataURL('image/jpeg',.92);a.click();
+});
+document.getElementById('qrdl').addEventListener('click',function(){
+  rQR();setTimeout(function(){var a=document.createElement('a');a.download='qr-mariage.png';a.href=document.getElementById('qrc').toDataURL();a.click();},300);
 });
 
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){document.getElementById('lb').classList.remove('open');clearTimeout(ssTimer);document.getElementById('ssOverlay').classList.remove('open');}
+  if(e.key==='Escape'){document.getElementById('lb').classList.remove('on');clearTimeout(ssT);document.getElementById('ss').style.display='none';}
 });
+
+// Init gallery
+rGallery();rVoeux();
 </script>
 </body>
 </html>
