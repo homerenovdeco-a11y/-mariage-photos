@@ -342,6 +342,7 @@ body.night .tab-btn.active { color: #e8d5a3; }
   <button class="tab-btn" data-tab="concours">🎁 Concours</button>
   <button class="tab-btn" data-tab="plan">🗺️ Plan</button>
   <button class="tab-btn" data-tab="cadre">🖼️ Cadre</button>
+  <button class="tab-btn" data-tab="qr">📱 QR Code</button>
 </div>
 
 <!-- TAB PHOTOS -->
@@ -559,6 +560,23 @@ body.night .tab-btn.active { color: #e8d5a3; }
     <p class="anniversary-sub" id="annivSub">Ces photos seront débloquées le 27 juin 2027 pour votre premier anniversaire de mariage ✨</p>
     <div class="anniversary-date" id="annivDate">27 · 06 · 2027</div>
     <div class="anniversary-grid" id="annivGrid"></div>
+  </div>
+</div>
+
+
+<!-- TAB QR CODE -->
+<div class="tab-content" id="tab-qr">
+  <div style="max-width:500px;margin:40px auto 60px;padding:0 20px;text-align:center;position:relative;z-index:1;">
+    <span class="section-label" style="display:block;margin-bottom:8px;">QR Code de l'application</span>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gris);margin-bottom:24px;">À imprimer et déposer sur les tables</p>
+    <div class="qr-inline">
+      <canvas id="qrMainCanvas"></canvas>
+      <div class="qr-url" style="margin-top:10px;">https://homerenovdeco-a11y.github.io/-mariage-photos/</div>
+    </div>
+    <button class="btn-gold" id="qrDownload" style="width:100%;margin-top:16px;">⬇ Télécharger le QR code</button>
+    <div class="share-bar" style="justify-content:center;margin-top:12px;">
+      <a class="btn-share whatsapp" href="https://wa.me/?text=https%3A%2F%2Fhomerenovdeco-a11y.github.io%2F-mariage-photos%2F" target="_blank">💬 Partager sur WhatsApp</a>
+    </div>
   </div>
 </div>
 
@@ -1144,40 +1162,38 @@ document.getElementById('frameDownload').addEventListener('click', () => {
   a.click();
 });
 
-// ── ANNIVERSAIRE ──
-function checkAnniversary() {
-  const unlock = new Date('2027-06-27T00:00:00');
-  const annivSection = document.getElementById('anniversarySection');
-  if (new Date() >= unlock) {
-    document.getElementById('annivLock').textContent = '💍';
-    document.getElementById('annivTitle').textContent = 'Bonne Anniversaire !';
-    document.getElementById('annivSub').textContent = '1 an déjà… Voici tous vos souvenirs du plus beau jour ✨';
-    document.getElementById('annivDate').style.display = 'none';
-    const grid = document.getElementById('annivGrid');
-    grid.style.filter = 'none';
-    grid.style.pointerEvents = 'auto';
-    grid.style.opacity = '1';
-    grid.innerHTML = photos.slice(0,24).map(p =>
-      `<img src="${p.url}" alt="${p.author}" style="cursor:pointer;" onclick="openLightbox({url:'${p.url}',author:'${p.author}',time:'${p.time}'})">`
-    ).join('');
-  } else {
-    // Show blurred preview
-    const grid = document.getElementById('annivGrid');
-    grid.innerHTML = photos.slice(0,12).map(p => `<img src="${p.url}" alt="">`).join('');
-  }
-}
-
-// Hook into tab clicks for plan, cadre, anniversaire
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (btn.dataset.tab === 'plan') { /* plan auto-renders */ }
-    if (btn.dataset.tab === 'anniversaire') checkAnniversary();
-  });
+);
 });
 
 // ── PATCH renderGallery for tags ──
 const _origRenderGallery = renderGallery;
 // Override filter to include tag
+
+
+// ── QR CODE TAB ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  if (btn.dataset.tab === 'qr') {
+    btn.addEventListener('click', () => {
+      setTimeout(() => {
+        const canvas = document.getElementById('qrMainCanvas');
+        if (canvas && typeof QRCode !== 'undefined') {
+          QRCode.toCanvas(canvas, 'https://homerenovdeco-a11y.github.io/-mariage-photos/', {
+            width: 240, margin: 2,
+            color: { dark: '#2C1F0E', light: '#ffffff' }
+          });
+        }
+      }, 100);
+    });
+  }
+});
+document.getElementById('qrDownload') && document.getElementById('qrDownload').addEventListener('click', () => {
+  const canvas = document.getElementById('qrMainCanvas');
+  if (!canvas) return;
+  const a = document.createElement('a');
+  a.download = 'qr-mariage-ss.png';
+  a.href = canvas.toDataURL();
+  a.click();
+});
 
 document.addEventListener('keydown', e => {
   if (e.key==='Escape') { lightbox.classList.remove('open'); stopSlideshow(); }
