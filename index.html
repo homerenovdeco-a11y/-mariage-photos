@@ -109,8 +109,8 @@ select.inp{cursor:pointer;}
 .fb-status{font-size:11px;color:var(--gris);text-align:center;padding:6px;font-style:italic;}
 @media(max-width:500px){.grid{columns:2 140px;}.row{flex-direction:column;}}
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js" defer></script>
 </head>
 <body>
 
@@ -146,7 +146,6 @@ select.inp{cursor:pointer;}
   <button class="tab" data-p="concours">🎁 Concours</button>
   <button class="tab" data-p="plan">🗺️ Plan</button>
   <button class="tab" data-p="cadre">🖼️ Cadre</button>
-  <button class="tab" data-p="qr">📱 QR Code</button>
 </div>
 
 <div class="page on" id="p-photos">
@@ -290,15 +289,8 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
-<div class="page" id="p-qr">
-  <div class="wrap" style="text-align:center;">
-    <span class="lbl">QR Code de l'application</span>
-    <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:var(--gris);margin-bottom:16px;">À imprimer et déposer sur les tables</p>
-    <div class="qbox">
-      <canvas id="qrc"></canvas>
-      <div class="qurl">https://glistening-smakager-80ded9.netlify.app</div>
     </div>
-    <button class="btn" id="qrdl" style="margin-top:12px;">⬇ Télécharger le QR code</button>
+    <a href="https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=https%3A%2F%2Fglistening-smakager-80ded9.netlify.app&chco=2C1F0E&chf=bg,s,FDFAF6" download="qr-mariage.png" target="_blank" class="btn" style="margin-top:12px;display:block;text-decoration:none;">⬇ Télécharger le QR code</a>
     <a href="https://wa.me/?text=https%3A%2F%2Fhomerenovdeco-a11y.github.io%2F-mariage-photos%2F" target="_blank" class="obtn" style="display:block;margin-top:8px;text-align:center;">💬 Partager sur WhatsApp</a>
   </div>
 </div>
@@ -324,6 +316,8 @@ select.inp{cursor:pointer;}
 
 <script>
 // ── FIREBASE INIT ──
+window.fbOK = false;
+document.addEventListener('DOMContentLoaded', function() {
 try {
   firebase.initializeApp({
     apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
@@ -341,6 +335,7 @@ try {
 } catch(e) {
   window.fbOK = false;
 }
+}); // end DOMContentLoaded
 
 window.addEventListener("load", function() {
 // ── COUNTDOWN ──
@@ -363,7 +358,7 @@ document.querySelectorAll('.tab').forEach(function(t){
     document.getElementById('p-'+t.dataset.p).classList.add('on');
     if(t.dataset.p==='palmares')rPalmares();
     if(t.dataset.p==='concours')rConcours();
-    if(t.dataset.p==='qr')rQR();
+    
   });
 });
 
@@ -516,13 +511,6 @@ function rConcours(){
   }
 }
 
-function rQR(){
-  if(typeof QRCode!=='undefined'){
-    QRCode.toCanvas(document.getElementById('qrc'),'https://glistening-smakager-80ded9.netlify.app',{width:200,margin:2,color:{dark:'#2C1F0E',light:'#ffffff'}});
-  }
-}
-setTimeout(rQR,1000);
-
 // ── LIGHTBOX ──
 function oLB(p){
   document.getElementById('lbimg').src=p.url;
@@ -598,9 +586,7 @@ function dF(img,f){
   else if(f===9){c.fillStyle='#F5F0E8';c.fillRect(0,0,S,S);c.strokeStyle='#8BAF7C';c.lineWidth=2;c.strokeRect(20,20,S-40,S-40);c.font='30px serif';c.textAlign='center';[[20,34],[S-20,34],[20,S-20],[S-20,S-20]].forEach(function(p){c.fillText('🌿',p[0],p[1]);});c.fillStyle='#3D5A2E';c.font='italic 26px serif';c.fillText('Mariage Solène & Sébastien',S/2,62);cs(img,c,32,74,S-64,S-134);c.fillStyle='#3D5A2E';c.font='italic 22px serif';c.fillText('27 · 06 · 2026',S/2,S-14);}
   document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir https://glistening-smakager-80ded9.netlify.app');
 }
-document.getElementById('qrdl').addEventListener('click',function(){
-  rQR();setTimeout(function(){var a=document.createElement('a');a.download='qr-mariage.png';a.href=document.getElementById('qrc').toDataURL();a.click();},300);
-});
+
 
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){document.getElementById('lb').classList.remove('on');clearTimeout(ssT);document.getElementById('ss').style.display='none';}
@@ -812,6 +798,5 @@ document.getElementById('fdl').addEventListener('click',function(){
   var a=document.createElement('a');a.download='souvenir-ss.jpg';a.href=document.getElementById('fc').toDataURL('image/jpeg',.92);a.click();
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </body>
 </html>
