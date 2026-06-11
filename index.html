@@ -8,9 +8,9 @@
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 
-<!-- Firebase compat (fonctionne sur tous les navigateurs) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<!-- Firebase chargé en différé -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js" defer></script>
 
 <style>
 :root{--or:#C9A84C;--or-pale:#E8D5A3;--ivoire:#F8F4EE;--ivoire-deep:#EDE7D9;--brun:#2C1F0E;--gris:#7A6E62;--blanc:#FDFAF6;}
@@ -331,7 +331,12 @@ select.input{cursor:pointer;}
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
 <script>
-// ── FIREBASE INIT ──
+// ── FIREBASE INIT (différé) ──
+function initFirebase() {
+  if (typeof firebase === 'undefined') {
+    setTimeout(initFirebase, 500);
+    return;
+  }
 var firebaseConfig = {
   apiKey: "AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
   authDomain: "mariage-solene-seb.firebaseapp.com",
@@ -475,6 +480,9 @@ voeuxRef.on('value',function(snap){
 });
 
 // Voeux
+} // end initFirebase
+setTimeout(initFirebase, 100);
+
 document.getElementById('voeuxText').addEventListener('input',checkVoeux);
 document.getElementById('voeuxName').addEventListener('input',checkVoeux);
 function checkVoeux(){document.getElementById('voeuxBtn').disabled=!(document.getElementById('voeuxText').value.trim()&&document.getElementById('voeuxName').value.trim());}
