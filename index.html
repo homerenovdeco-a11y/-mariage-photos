@@ -362,21 +362,9 @@ document.getElementById('ubtn').addEventListener('click',function(){
       var tag=document.getElementById('ptag').value;
       var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
       // Try Firebase first
-      if(window.fbRef){
-        window.fbRef.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:Date.now()}).then(function(ref){
-          p.id=ref.key;
-          pb.style.width=((i+1)/pending.length*100)+'%';
-          i++;next();
-        }).catch(function(){
-          photos.unshift(p);rGallery();
-          pb.style.width=((i+1)/pending.length*100)+'%';
-          i++;next();
-        });
-      } else {
-        photos.unshift(p);rGallery();
-        pb.style.width=((i+1)/pending.length*100)+'%';
-        i++;next();
-      }
+      photos.unshift(p);rGallery();
+      pb.style.width=((i+1)/pending.length*100)+'%';
+      i++;next();
     });
   }
   next();
@@ -394,62 +382,7 @@ function compress(file,max,q,cb){
   img.src=url;
 }
 
-// ── FIREBASE (chargé séparément, non bloquant) ──
-function loadFirebase(){
-  var s1=document.createElement('script');
-  s1.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
-  s1.onload=function(){
-    var s2=document.createElement('script');
-    s2.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js';
-    s2.onload=function(){
-      try{
-        firebase.initializeApp({
-          apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
-          authDomain:"mariage-solene-seb.firebaseapp.com",
-          databaseURL:"https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId:"mariage-solene-seb",
-          storageBucket:"mariage-solene-seb.firebasestorage.app",
-          messagingSenderId:"391409891585",
-          appId:"1:391409891585:web:db1454ffdf07f401d14300"
-        });
-        var db=firebase.database();
-        window.fbRef=db.ref('photos');
-        window.fbVRef=db.ref('voeux');
-        document.getElementById('fbstatus').textContent='✅ Connecté — photos partagées en temps réel';
-        setTimeout(function(){document.getElementById('fbstatus').style.display='none';},3000);
-        // Listen photos
-        window.fbRef.on('value',function(snap){
-          photos=[];
-          if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
-          rGallery();
-        });
-        // Listen voeux
-        window.fbVRef.on('value',function(snap){
-          voeux=[];
-          if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
-          rVoeux();
-        });
-        // Voeux submit
-        document.getElementById('vbtn').addEventListener('click',function(){
-          var t=document.getElementById('vtxt').value.trim(),n=document.getElementById('vname').value.trim();
-          if(!t||!n)return;
-          window.fbVRef.push({author:n,text:t,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})});
-          document.getElementById('vtxt').value='';document.getElementById('vname').value='';
-          document.getElementById('vbtn').disabled=true;
-        });
-      }catch(e){
-        document.getElementById('fbstatus').textContent='⚠️ Mode local (photos non partagées)';
-      }
-    };
-    document.head.appendChild(s2);
-  };
-  s1.onerror=function(){
-    document.getElementById('fbstatus').textContent='⚠️ Mode local (pas de connexion)';
-  };
-  document.head.appendChild(s1);
-}
-// Load Firebase after page is ready
-setTimeout(loadFirebase,500);
+// Firebase désactivé temporairement
 
 // Voeux input check
 document.getElementById('vtxt').addEventListener('input',cV);
