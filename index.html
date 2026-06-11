@@ -305,7 +305,7 @@ select.inp{cursor:pointer;}
 // ── COUNTDOWN ──
 function tick(){
   var d=new Date('2026-06-27T14:00:00')-new Date();
-  if(d<=0){document.getElementById('cd').innerHTML='<div style="text-align:center;font-family:serif;font-style:italic;font-size:20px;color:#E8D5A3;padding:16px;">✨ C'est le grand jour ! ✨</div>';return;}
+  if(d<=0){document.getElementById('cd').innerHTML='<div style="text-align:center;font-family:serif;font-style:italic;font-size:20px;color:#E8D5A3;padding:16px;">✨ Le grand jour est arrivé ! ✨</div>';return;}
   document.getElementById('cdJ').textContent=String(Math.floor(d/86400000)).padStart(2,'0');
   document.getElementById('cdH').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');
   document.getElementById('cdM').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');
