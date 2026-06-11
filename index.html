@@ -170,7 +170,7 @@ select.inp{cursor:pointer;}
     <button class="btn" id="ubtn" disabled>Partager</button>
     <div class="prog-wrap" id="pw"><div class="prog-bar" id="pb"></div></div>
     <p class="status" id="stxt"></p>
-    <p class="fb-status" id="fbstatus">Connexion en cours…</p>
+    
   </div>
   <div class="gwrap">
     <div class="ghead">
@@ -302,6 +302,7 @@ select.inp{cursor:pointer;}
 
 
 <script>
+window.addEventListener("load", function() {
 // ── COUNTDOWN ──
 function tick(){
   var d=new Date('2026-06-27T14:00:00')-new Date();
@@ -526,8 +527,7 @@ function drawF(file){
       c.fillText('27 · 06 · 2026',S/2,S-B+8);
       c.fillStyle='#C9A84C';c.font='14px serif';
       [[10,14],[S-10,14],[10,S-6],[S-10,S-6]].forEach(function(p){c.textAlign='center';c.fillText('✦',p[0],p[1]);});
-      document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir 💛
-https://homerenovdeco-a11y.github.io/-mariage-photos/');
+      document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage S&S 💛 https://homerenovdeco-a11y.github.io/-mariage-photos/');
     };img.src=ev.target.result;
   };r.readAsDataURL(file);
 }
@@ -544,6 +544,7 @@ document.addEventListener('keydown',function(e){
 
 // Init gallery
 rGallery();rVoeux();
+}); // end load
 </script>
 </body>
 </html>
