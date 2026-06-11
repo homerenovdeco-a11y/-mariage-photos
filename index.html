@@ -22,12 +22,12 @@ body{background:var(--ivoire);font-family:'Jost',system-ui,sans-serif;color:var(
 .hero-date{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--or);margin-top:10px;}
 .hero-sub{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:16px;color:var(--or-pale);margin-top:6px;}
 .divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);margin:14px auto 0;}
-.cd{background:var(--brun);padding:18px;text-align:center;}
-.cd-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gris);margin-bottom:10px;}
+.cd{background:#FBF5E9;border-top:1px solid #E8D5A3;border-bottom:1px solid #E8D5A3;padding:20px;text-align:center;}
+.cd-label{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--or);margin-bottom:12px;}
 .cd-row{display:flex;justify-content:center;align-items:flex-end;gap:4px;}
 .cd-block{text-align:center;min-width:48px;}
 .cd-num{font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;color:var(--or);line-height:1;}
-.cd-unit{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-top:2px;}
+.cd-unit{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--or);margin-top:4px;}
 .cd-sep{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;color:var(--or);opacity:.3;padding-bottom:8px;}
 .tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--or-pale);scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
@@ -109,6 +109,8 @@ select.inp{cursor:pointer;}
 .fb-status{font-size:11px;color:var(--gris);text-align:center;padding:6px;font-style:italic;}
 @media(max-width:500px){.grid{columns:2 140px;}.row{flex-direction:column;}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -321,6 +323,25 @@ select.inp{cursor:pointer;}
 
 
 <script>
+// ── FIREBASE INIT ──
+try {
+  firebase.initializeApp({
+    apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
+    authDomain:"mariage-solene-seb.firebaseapp.com",
+    databaseURL:"https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId:"mariage-solene-seb",
+    storageBucket:"mariage-solene-seb.firebasestorage.app",
+    messagingSenderId:"391409891585",
+    appId:"1:391409891585:web:db1454ffdf07f401d14300"
+  });
+  var fbDB = firebase.database();
+  var fbPhotos = fbDB.ref("photos");
+  var fbVoeux = fbDB.ref("voeux");
+  window.fbOK = true;
+} catch(e) {
+  window.fbOK = false;
+}
+
 window.addEventListener("load", function() {
 // ── COUNTDOWN ──
 function tick(){
@@ -382,9 +403,14 @@ document.getElementById('ubtn').addEventListener('click',function(){
       var tag=document.getElementById('ptag').value;
       var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
       // Try Firebase first
-      photos.unshift(p);rGallery();
-      pb.style.width=((i+1)/pending.length*100)+'%';
-      i++;next();
+      if(window.fbOK){
+        fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).then(function(){
+          pb.style.width=((i+1)/pending.length*100)+'%';i++;next();
+        }).catch(function(){photos.unshift(p);rGallery();pb.style.width=((i+1)/pending.length*100)+'%';i++;next();});
+      } else {
+        photos.unshift(p);rGallery();
+        pb.style.width=((i+1)/pending.length*100)+'%';i++;next();
+      }
     });
   }
   next();
@@ -408,6 +434,7 @@ function compress(file,max,q,cb){
 document.getElementById('vtxt').addEventListener('input',cV);
 document.getElementById('vname').addEventListener('input',cV);
 function cV(){document.getElementById('vbtn').disabled=!(document.getElementById('vtxt').value.trim()&&document.getElementById('vname').value.trim());}
+// vbtn click handled by Firebase listener above if FB connected
 
 // ── GALLERY ──
 function rGallery(){
@@ -581,6 +608,30 @@ document.addEventListener('keydown',function(e){
 
 // Init gallery
 rGallery();rVoeux();
+
+// ── FIREBASE LISTENERS ──
+if(window.fbOK){
+  fbPhotos.on("value",function(snap){
+    photos=[];
+    if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
+    rGallery();
+  });
+  fbVoeux.on("value",function(snap){
+    voeux=[];
+    if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
+    rVoeux();
+  });
+  // Voeux submit via Firebase
+  document.getElementById("vbtn").addEventListener("click",function(){
+    var t=document.getElementById("vtxt").value.trim(),n=document.getElementById("vname").value.trim();
+    if(!t||!n)return;
+    fbVoeux.push({author:n,text:t,time:new Date().toLocaleString("fr-FR",{day:"2-digit",month:"long",hour:"2-digit",minute:"2-digit"})});
+    document.getElementById("vtxt").value="";document.getElementById("vname").value="";
+    document.getElementById("vbtn").disabled=true;
+  });
+  document.getElementById("galleryLoader").style.display="flex";
+}
+
 }); // end load
 
 // ── CADRE ──
