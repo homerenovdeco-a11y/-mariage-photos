@@ -109,6 +109,7 @@ select.inp{cursor:pointer;}
 .fb-status{font-size:11px;color:var(--gris);text-align:center;padding:6px;font-style:italic;}
 @media(max-width:500px){.grid{columns:2 140px;}.row{flex-direction:column;}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.0/firebase-app-compat.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.0/firebase-database-compat.js" defer></script>
 </head>
@@ -183,6 +184,7 @@ select.inp{cursor:pointer;}
       <span class="badge" id="adminBadge" style="display:none;background:#C0392B;">MODE ADMIN</span>
       <button class="obtn" id="ssbtn" style="margin-left:auto">▶ Diaporama</button>
       <button class="obtn" id="dlbtn">⬇ Tout télécharger</button>
+      <button class="obtn" id="exportZip" style="display:none;background:#C0392B;color:white;border-color:#C0392B;">📦 Export ZIP</button>
     </div>
     <div class="chips" id="tagchips">
       <button class="chip on" data-tag="all">Tous</button>
@@ -300,6 +302,8 @@ select.inp{cursor:pointer;}
 <div class="lb" id="lb">
   <div class="lb-in">
     <button class="lb-x" id="lbx">✕</button>
+    <button id="lbprev" style="position:absolute;left:-6px;top:50%;transform:translateY(-50%);background:rgba(253,250,246,.88);border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;z-index:2;">‹</button>
+    <button id="lbnext" style="position:absolute;right:-6px;top:50%;transform:translateY(-50%);background:rgba(253,250,246,.88);border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;z-index:2;">›</button>
     <img id="lbimg" src="" alt="">
     <div class="lb-info">
       <div class="lb-author" id="lbauth"></div>
@@ -356,8 +360,34 @@ setInterval(function(){
 window.addEventListener("load", function() {
 // ── COUNTDOWN ──
 function tick(){
-  var d=new Date('2026-06-27T14:00:00')-new Date();
-  if(d<=0){document.getElementById('cd').innerHTML='<div style="text-align:center;font-family:serif;font-style:italic;font-size:20px;color:#E8D5A3;padding:16px;">✨ Le grand jour est arrivé ! ✨</div>';return;}
+  var now=new Date();
+  var ceremonie=new Date('2026-06-27T16:00:00');
+  var finConcours=new Date('2026-06-28T14:00:00');
+  var cdEl=document.getElementById('cd');
+
+  if(now>=finConcours){
+    // Message final après le concours
+    cdEl.innerHTML='<div style="text-align:center;padding:24px 16px;">'
+      +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:15px;font-style:italic;color:var(--or);letter-spacing:1px;line-height:1.8;max-width:480px;margin:0 auto;">'
+      +'Merci d\'avoir été là, pour vos sourires, votre énergie et tout l\'amour partagé avec nous.<br><br>'
+      +'Chaque souvenir que vous avez capturé ici est précieux à nos yeux.<br><br>'
+      +'Avec tout notre cœur,<br>Solène &amp; Sébastien 💛'
+      +'</div></div>';
+    return;
+  }
+
+  if(now>=ceremonie){
+    var d2=now-ceremonie;
+    cdEl.innerHTML='<div style="text-align:center;padding:18px;">'
+      +'<div style="font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--or);margin-bottom:8px;">Aujourd\'hui</div>'
+      +'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:26px;font-weight:300;color:var(--or);letter-spacing:1px;">✨ On se marie aujourd\'hui ! ✨</div>'
+      +'<div style="font-size:11px;color:var(--gris);margin-top:6px;letter-spacing:2px;">Cérémonie à 16h00</div>'
+      +'</div>';
+    return;
+  }
+
+  var d=ceremonie-now;
+  if(d<=0)return;
   document.getElementById('cdJ').textContent=String(Math.floor(d/86400000)).padStart(2,'0');
   document.getElementById('cdH').textContent=String(Math.floor(d%86400000/3600000)).padStart(2,'0');
   document.getElementById('cdM').textContent=String(Math.floor(d%3600000/60000)).padStart(2,'0');
@@ -580,13 +610,50 @@ function rConcours(){
 }
 
 // ── LIGHTBOX ──
+var lbList=[],lbIdx=0;
 function oLB(p){
+  // Build the list from currently filtered/visible photos
+  lbList=photos.slice();
+  if(aflt!=='all')lbList=lbList.filter(function(x){return x.author===aflt;});
+  if(atag!=='all')lbList=lbList.filter(function(x){return x.tag===atag;});
+  lbIdx=lbList.findIndex(function(x){return x.id===p.id;});
+  if(lbIdx<0)lbIdx=0;
+  showLB();
+  document.getElementById('lb').classList.add('on');
+}
+function showLB(){
+  var p=lbList[lbIdx];
+  if(!p)return;
   document.getElementById('lbimg').src=p.url;
   document.getElementById('lbauth').textContent=p.author+' · '+p.time;
   document.getElementById('lbdl').href=p.url;
-  document.getElementById('lb').classList.add('on');
+  var multi=lbList.length>1;
+  document.getElementById('lbprev').style.display=multi?'flex':'none';
+  document.getElementById('lbnext').style.display=multi?'flex':'none';
+  document.getElementById('lbprev').style.alignItems='center';document.getElementById('lbprev').style.justifyContent='center';
+  document.getElementById('lbnext').style.alignItems='center';document.getElementById('lbnext').style.justifyContent='center';
+}
+function lbNav(dir){
+  if(!lbList.length)return;
+  lbIdx=(lbIdx+dir+lbList.length)%lbList.length;
+  showLB();
 }
 document.getElementById('lbx').addEventListener('click',function(){document.getElementById('lb').classList.remove('on');});
+document.getElementById('lbprev').addEventListener('click',function(e){e.stopPropagation();lbNav(-1);});
+document.getElementById('lbnext').addEventListener('click',function(e){e.stopPropagation();lbNav(1);});
+// Swipe gestures
+var lbTouchX=0;
+document.getElementById('lbimg').addEventListener('touchstart',function(e){lbTouchX=e.touches[0].clientX;});
+document.getElementById('lbimg').addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-lbTouchX;
+  if(Math.abs(dx)>50){lbNav(dx>0?-1:1);}
+});
+// Keyboard arrows
+document.addEventListener('keydown',function(e){
+  if(!document.getElementById('lb').classList.contains('on'))return;
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+});
 document.getElementById('lb').addEventListener('click',function(e){if(e.target===document.getElementById('lb'))document.getElementById('lb').classList.remove('on');});
 
 // ── SLIDESHOW ──
@@ -884,6 +951,7 @@ document.addEventListener('DOMContentLoaded', function(){
       tapCount = 0;
       adminMode = !adminMode;
       document.getElementById('adminBadge').style.display = adminMode ? 'inline-block' : 'none';
+      document.getElementById('exportZip').style.display = adminMode ? 'inline-block' : 'none';
       rGallery();
     }
   });
@@ -898,6 +966,24 @@ function deletePhoto(id){
     rGallery();
   }
 }
+
+document.getElementById('exportZip').addEventListener('click', function(){
+  if(typeof JSZip==='undefined'){alert('Bibliothèque ZIP non chargée, réessayez dans 2s');return;}
+  var btn=this;btn.textContent='⏳ Préparation...';btn.disabled=true;
+  var zip=new JSZip();
+  photos.forEach(function(p,i){
+    var data=p.url.split(',')[1];
+    var safeName=(p.author||'invite').replace(/[^a-zA-Z0-9]/g,'_');
+    zip.file('mariage-'+safeName+'-'+(i+1)+'.jpg', data, {base64:true});
+  });
+  zip.generateAsync({type:'blob'}).then(function(content){
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(content);
+    a.download='photos-mariage-SS.zip';
+    a.click();
+    btn.textContent='📦 Export ZIP';btn.disabled=false;
+  });
+});
 </script>
 </body>
 </html>
