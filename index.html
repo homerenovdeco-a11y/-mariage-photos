@@ -317,25 +317,31 @@ select.inp{cursor:pointer;}
 <script>
 // ── FIREBASE INIT ──
 window.fbOK = false;
-document.addEventListener('DOMContentLoaded', function() {
-try {
-  firebase.initializeApp({
-    apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
-    authDomain:"mariage-solene-seb.firebaseapp.com",
-    databaseURL:"https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId:"mariage-solene-seb",
-    storageBucket:"mariage-solene-seb.firebasestorage.app",
-    messagingSenderId:"391409891585",
-    appId:"1:391409891585:web:db1454ffdf07f401d14300"
-  });
-  var fbDB = firebase.database();
-  var fbPhotos = fbDB.ref("photos");
-  var fbVoeux = fbDB.ref("voeux");
-  window.fbOK = true;
-} catch(e) {
-  window.fbOK = false;
+function initFirebase(){
+  if(typeof firebase === 'undefined'){
+    setTimeout(initFirebase, 200);
+    return;
+  }
+  try {
+    firebase.initializeApp({
+      apiKey:"AIzaSyAaCXqTpgnmi1fEnBaZqvCiWDOr1RApSMI",
+      authDomain:"mariage-solene-seb.firebaseapp.com",
+      databaseURL:"https://mariage-solene-seb-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId:"mariage-solene-seb",
+      storageBucket:"mariage-solene-seb.firebasestorage.app",
+      messagingSenderId:"391409891585",
+      appId:"1:391409891585:web:db1454ffdf07f401d14300"
+    });
+    window.fbDB = firebase.database();
+    window.fbPhotos = window.fbDB.ref("photos");
+    window.fbVoeux = window.fbDB.ref("voeux");
+    window.fbOK = true;
+    if(window.onFbReady) window.onFbReady();
+  } catch(e) {
+    window.fbOK = false;
+  }
 }
-}); // end DOMContentLoaded
+initFirebase();
 
 window.addEventListener("load", function() {
 // ── COUNTDOWN ──
@@ -387,8 +393,8 @@ document.getElementById('ubtn').addEventListener('click',function(){
     if(i>=pending.length){
       pb.style.width='100%';
       setS('✓ '+pending.length+' souvenir'+(pending.length>1?'s':'')+' partagé'+(pending.length>1?'s':'')+' !');
-      // Save to Firebase if available, else local
       pending=[];document.getElementById('fi').value='';document.getElementById('gname').value='';chkU();
+      document.getElementById('ubtn').disabled=false;
       setTimeout(function(){document.getElementById('pw').style.display='none';pb.style.width='0';setS('');},2500);
       return;
     }
@@ -399,7 +405,7 @@ document.getElementById('ubtn').addEventListener('click',function(){
       // Show immediately, send to Firebase in background (non-blocking)
       photos.unshift(p);rGallery();
       if(window.fbOK){
-        fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).catch(function(){});
+        window.fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).catch(function(){});
       }
       pb.style.width=((i+1)/pending.length*100)+'%';
       i++;
@@ -643,13 +649,13 @@ document.addEventListener('keydown',function(e){
 rGallery();rVoeux();
 
 // ── FIREBASE LISTENERS ──
-if(window.fbOK){
-  fbPhotos.on("value",function(snap){
+function setupFirebaseListeners(){
+  window.fbPhotos.on("value",function(snap){
     photos=[];
     if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
     rGallery();
   });
-  fbVoeux.on("value",function(snap){
+  window.fbVoeux.on("value",function(snap){
     voeux=[];
     if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
     rVoeux();
@@ -658,12 +664,14 @@ if(window.fbOK){
   document.getElementById("vbtn").addEventListener("click",function(){
     var t=document.getElementById("vtxt").value.trim(),n=document.getElementById("vname").value.trim();
     if(!t||!n)return;
-    fbVoeux.push({author:n,text:t,time:new Date().toLocaleString("fr-FR",{day:"2-digit",month:"long",hour:"2-digit",minute:"2-digit"})});
+    window.fbVoeux.push({author:n,text:t,time:new Date().toLocaleString("fr-FR",{day:"2-digit",month:"long",hour:"2-digit",minute:"2-digit"})});
     document.getElementById("vtxt").value="";document.getElementById("vname").value="";
     document.getElementById("vbtn").disabled=true;
   });
   document.getElementById("galleryLoader").style.display="flex";
 }
+if(window.fbOK){ setupFirebaseListeners(); }
+window.onFbReady = setupFirebaseListeners;
 
 }); // end load
 
