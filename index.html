@@ -318,8 +318,11 @@ select.inp{cursor:pointer;}
 <script>
 // ── FIREBASE INIT ──
 window.fbOK = false;
+var fbAttempts=0;
 function initFirebase(){
+  fbAttempts++;
   if(typeof firebase === 'undefined'){
+    if(fbAttempts>50){window.fbError='Script Firebase non chargé après 10s';return;}
     setTimeout(initFirebase, 200);
     return;
   }
@@ -345,7 +348,7 @@ function initFirebase(){
 initFirebase();
 setInterval(function(){
   var el=document.getElementById('fbdbg');
-  if(el) el.textContent='Firebase: '+(window.fbOK?'✅ connecté':'⏳ connexion...');
+  if(el) el.textContent='Firebase: '+(window.fbOK?'✅ connecté':(window.fbError?'❌ '+window.fbError:'⏳ tentative '+fbAttempts));
 },500);
 
 window.addEventListener("load", function() {
