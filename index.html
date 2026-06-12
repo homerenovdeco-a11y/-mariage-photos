@@ -601,6 +601,7 @@ function cV(){document.getElementById('vbtn').disabled=!(document.getElementById
 
 // ── GALLERY ──
 function rGallery(){
+  updateDashboard();
   if(!document.getElementById('sortSelect').dataset.bound){
     document.getElementById('sortSelect').dataset.bound='1';
     document.getElementById('sortSelect').addEventListener('change',rGallery);
