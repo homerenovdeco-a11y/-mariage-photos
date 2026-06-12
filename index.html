@@ -310,6 +310,11 @@ select.inp{cursor:pointer;}
 
 
 <div style="text-align:center;padding:30px 16px;border-top:1px solid var(--or-pale);">
+  <a href="https://homerenovdeco-a11y.github.io/Beer-semaine/bieres.html" target="_blank" style="display:inline-block;background:var(--or);color:var(--brun);font-family:'Jost',system-ui,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:2px;text-decoration:none;font-weight:500;">
+    🍺 Accès à l'appli de la Bière
+  </a>
+  <p style="font-size:10px;color:var(--gris);margin-top:8px;margin-bottom:20px;font-style:italic;font-family:'Cormorant Garamond',Georgia,serif;">Suivi de notre semaine entre amis</p>
+
   <button id="copyLinkBtn" style="background:none;border:1.5px solid var(--or-pale);color:var(--gris);font-family:'Jost',system-ui,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:2px;cursor:pointer;">
     📋 Copier le lien de l'appli
   </button>
@@ -479,6 +484,7 @@ document.getElementById('ubtn').addEventListener('click',function(){
     if(i>=pending.length){
       pb.style.width='100%';
       setS('✓ '+pending.length+' souvenir'+(pending.length>1?'s':'')+' partagé'+(pending.length>1?'s':'')+' !');
+      launchConfetti();
       pending=[];document.getElementById('fi').value='';document.getElementById('gname').value='';document.getElementById('gcaption').value='';chkU();
       document.getElementById('ubtn').disabled=false;
       setTimeout(function(){document.getElementById('pw').style.display='none';pb.style.width='0';setS('');},2500);
@@ -1064,6 +1070,38 @@ function fallbackCopy(text, cb){
   try{document.execCommand('copy');}catch(e){}
   document.body.removeChild(ta);
   if(cb)cb();
+}
+
+// ── CONFETTIS ──
+function launchConfetti(){
+  var colors=['#C9A84C','#E8D5A3','#FDFAF6','#8B4E6B'];
+  var container=document.createElement('div');
+  container.style.position='fixed';container.style.inset='0';container.style.pointerEvents='none';container.style.zIndex='300';
+  document.body.appendChild(container);
+  for(var i=0;i<40;i++){
+    var c=document.createElement('div');
+    var size=Math.random()*8+6;
+    c.style.position='absolute';
+    c.style.width=size+'px';c.style.height=size+'px';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.left=Math.random()*100+'%';
+    c.style.top='-20px';
+    c.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    c.style.opacity='0.9';
+    var duration=Math.random()*1.5+1.5;
+    var rotation=Math.random()*720-360;
+    var drift=(Math.random()-0.5)*200;
+    c.style.transition='transform '+duration+'s cubic-bezier(.25,.46,.45,.94), opacity '+duration+'s';
+    container.appendChild(c);
+    (function(c,duration,rotation,drift){
+      setTimeout(function(){
+        c.style.transform='translate('+drift+'px, '+(window.innerHeight+50)+'px) rotate('+rotation+'deg)';
+        c.style.opacity='0';
+      },10);
+      setTimeout(function(){c.remove();},duration*1000+100);
+    })(c,duration,rotation,drift);
+  }
+  setTimeout(function(){container.remove();},3500);
 }
 </script>
 </body>
