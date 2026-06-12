@@ -343,6 +343,7 @@ function initFirebase(){
     if(window.onFbReady) window.onFbReady();
   } catch(e) {
     window.fbOK = false;
+    window.fbError = 'Init error: '+e.message;
   }
 }
 initFirebase();
