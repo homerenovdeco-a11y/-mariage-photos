@@ -171,6 +171,9 @@ select.inp{cursor:pointer;}
         <option value="portrait">🤳 Portrait</option>
       </select>
     </div>
+    <div class="row">
+      <input type="text" class="inp" id="gcaption" placeholder="💬 Petite légende (optionnel)">
+    </div>
     <button class="btn" id="ubtn" disabled>Partager</button>
     <div class="prog-wrap" id="pw"><div class="prog-bar" id="pb"></div></div>
     <p class="status" id="stxt"></p>
@@ -433,7 +436,7 @@ document.getElementById('ubtn').addEventListener('click',function(){
     if(i>=pending.length){
       pb.style.width='100%';
       setS('✓ '+pending.length+' souvenir'+(pending.length>1?'s':'')+' partagé'+(pending.length>1?'s':'')+' !');
-      pending=[];document.getElementById('fi').value='';document.getElementById('gname').value='';chkU();
+      pending=[];document.getElementById('fi').value='';document.getElementById('gname').value='';document.getElementById('gcaption').value='';chkU();
       document.getElementById('ubtn').disabled=false;
       setTimeout(function(){document.getElementById('pw').style.display='none';pb.style.width='0';setS('');},2500);
       return;
@@ -441,11 +444,12 @@ document.getElementById('ubtn').addEventListener('click',function(){
     setS('Compression '+(i+1)+'/'+pending.length+'…');
     compress(pending[i],1000,.65,function(b64){
       var tag=document.getElementById('ptag').value;
-      var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
+      var caption=document.getElementById('gcaption').value.trim();
+      var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,caption:caption,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
       // Show immediately, send to Firebase in background (non-blocking)
       photos.unshift(p);rGallery();
       if(window.fbOK){
-        window.fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).catch(function(){});
+        window.fbPhotos.push({author:p.author,url:p.url,tag:p.tag,caption:p.caption,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).catch(function(){});
       }
       pb.style.width=((i+1)/pending.length*100)+'%';
       i++;
@@ -551,7 +555,8 @@ function rGallery(){
     var c=document.createElement('div');c.className='card';
     var lv=hearts[p.id];
     var delBtn = adminMode ? '<button class="hbtn delbtn" data-del="'+p.id+'" style="top:auto;bottom:7px;left:7px;right:auto;background:rgba(192,57,43,.9);color:white;opacity:1;">🗑️</button>' : '';
-    c.innerHTML='<img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><button class="hbtn'+(lv?' on':'')+'">'+( lv?'❤️':'🤍')+'</button>'+delBtn+'<div class="card-meta"><div class="card-author">'+p.author+'</div><div class="card-time">'+p.time+'</div></div>';
+    var capHtml=p.caption?'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-style:italic;font-size:13px;color:var(--brun);margin-top:3px;">"'+p.caption+'"</div>':'';
+    c.innerHTML='<img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><button class="hbtn'+(lv?' on':'')+'">'+( lv?'❤️':'🤍')+'</button>'+delBtn+'<div class="card-meta"><div class="card-author">'+p.author+'</div><div class="card-time">'+p.time+'</div>'+capHtml+'</div>';
     c.querySelector('img').addEventListener('click',function(){oLB(p);});
     if(adminMode){
       var db=c.querySelector('.delbtn');
@@ -625,7 +630,7 @@ function showLB(){
   var p=lbList[lbIdx];
   if(!p)return;
   document.getElementById('lbimg').src=p.url;
-  document.getElementById('lbauth').textContent=p.author+' · '+p.time;
+  document.getElementById('lbauth').innerHTML=p.author+' · '+p.time+(p.caption?'<br><span style="font-style:italic;opacity:.85;">"'+p.caption+'"</span>':'');
   document.getElementById('lbdl').href=p.url;
   var multi=lbList.length>1;
   document.getElementById('lbprev').style.display=multi?'flex':'none';
