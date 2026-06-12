@@ -69,6 +69,12 @@ select.inp{cursor:pointer;}
 .card-time{font-size:10px;color:var(--gris);}
 .hbtn{position:absolute;top:7px;right:7px;background:rgba(253,250,246,.88);border:none;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
 .card:hover .hbtn,.hbtn.on{opacity:1;}
+.reactbar{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.reactbtn{border:1px solid var(--or-pale);background:var(--ivoire);border-radius:14px;padding:3px 8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px;line-height:1;transition:all .15s;}
+.reactbtn:hover{border-color:var(--or);transform:scale(1.08);}
+.reactbtn.on{background:var(--or);border-color:var(--or);}
+.rcnt{font-size:10px;color:var(--gris);font-family:'Jost',system-ui,sans-serif;}
+.reactbtn.on .rcnt{color:var(--brun);font-weight:600;}
 .empty{text-align:center;padding:40px 20px;}
 .empty-icon{font-size:32px;opacity:.3;margin-bottom:10px;}
 .empty-txt{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:18px;}
@@ -419,9 +425,39 @@ document.querySelectorAll('.tab').forEach(function(t){
 });
 
 // ── STATE ──
-var photos=[],voeux=[],hearts={},pending=[],atag='all',aflt='all';
-try{hearts=JSON.parse(localStorage.getItem('ss_h')||'{}');}catch(e){}
-function sH(){try{localStorage.setItem('ss_h',JSON.stringify(hearts));}catch(e){}}
+var photos=[],voeux=[],pending=[],atag='all',aflt='all';
+var REACT_EMOJIS=['❤️','😂','👍','👎'];
+var myReactions={};
+try{myReactions=JSON.parse(localStorage.getItem('ss_myreact')||'{}');}catch(e){}
+function saveMyReactions(){try{localStorage.setItem('ss_myreact',JSON.stringify(myReactions));}catch(e){}}
+
+function toggleReaction(photoId, emoji){
+  var prev=myReactions[photoId];
+  var photo=photos.find(function(p){return p.id===photoId;});
+  if(!photo)return;
+  if(!photo.reactions)photo.reactions={};
+
+  if(prev===emoji){
+    // Remove reaction
+    photo.reactions[emoji]=Math.max(0,(photo.reactions[emoji]||1)-1);
+    delete myReactions[photoId];
+  } else {
+    // Remove previous reaction count if any
+    if(prev && photo.reactions[prev]){
+      photo.reactions[prev]=Math.max(0,photo.reactions[prev]-1);
+    }
+    // Add new reaction
+    photo.reactions[emoji]=(photo.reactions[emoji]||0)+1;
+    myReactions[photoId]=emoji;
+  }
+  saveMyReactions();
+
+  if(window.fbOK && window.fbPhotos){
+    window.fbPhotos.child(photoId).child('reactions').set(photo.reactions);
+  } else {
+    rGallery();
+  }
+}
 
 // ── UPLOAD ──
 document.getElementById('fi').addEventListener('change',function(e){
@@ -560,19 +596,28 @@ function rGallery(){
   var g=document.getElementById('gal');g.innerHTML='';
   fl.forEach(function(p){
     var c=document.createElement('div');c.className='card';
-    var lv=hearts[p.id];
     var delBtn = adminMode ? '<button class="hbtn delbtn" data-del="'+p.id+'" style="top:auto;bottom:7px;left:7px;right:auto;background:rgba(192,57,43,.9);color:white;opacity:1;">🗑️</button>' : '';
     var capHtml=p.caption?'<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-style:italic;font-size:13px;color:var(--brun);margin-top:3px;">"'+p.caption+'"</div>':'';
-    c.innerHTML='<img src="'+p.url+'" alt="'+p.author+'" loading="lazy"><button class="hbtn'+(lv?' on':'')+'">'+( lv?'❤️':'🤍')+'</button>'+delBtn+'<div class="card-meta"><div class="card-author">'+p.author+'</div><div class="card-time">'+p.time+'</div>'+capHtml+'</div>';
+    var reacts=p.reactions||{};
+    var myReact=myReactions[p.id];
+    var reactBar='<div class="reactbar">';
+    REACT_EMOJIS.forEach(function(em){
+      var cnt=reacts[em]||0;
+      var on=myReact===em;
+      reactBar+='<button class="reactbtn'+(on?' on':'')+'" data-emoji="'+em+'" data-pid="'+p.id+'">'+em+(cnt>0?' <span class="rcnt">'+cnt+'</span>':'')+'</button>';
+    });
+    reactBar+='</div>';
+    c.innerHTML='<img src="'+p.url+'" alt="'+p.author+'" loading="lazy">'+delBtn+'<div class="card-meta"><div class="card-author">'+p.author+'</div><div class="card-time">'+p.time+'</div>'+capHtml+reactBar+'</div>';
     c.querySelector('img').addEventListener('click',function(){oLB(p);});
     if(adminMode){
       var db=c.querySelector('.delbtn');
       if(db) db.addEventListener('click',function(e){e.stopPropagation();deletePhoto(p.id);});
     }
-    c.querySelector('.hbtn:not(.delbtn)').addEventListener('click',function(e){
-      e.stopPropagation();hearts[p.id]=!hearts[p.id];
-      e.currentTarget.textContent=hearts[p.id]?'❤️':'🤍';
-      e.currentTarget.classList.toggle('on',hearts[p.id]);sH();
+    c.querySelectorAll('.reactbtn').forEach(function(rb){
+      rb.addEventListener('click',function(e){
+        e.stopPropagation();
+        toggleReaction(p.id, rb.dataset.emoji);
+      });
     });
     g.appendChild(c);
   });
