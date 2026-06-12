@@ -393,19 +393,17 @@ document.getElementById('ubtn').addEventListener('click',function(){
       return;
     }
     setS('Compression '+(i+1)+'/'+pending.length+'…');
-    compress(pending[i],1200,.78,function(b64){
-      pb.style.width=((i+.5)/pending.length*100)+'%';
+    compress(pending[i],1000,.65,function(b64){
       var tag=document.getElementById('ptag').value;
       var p={id:'l'+Date.now()+'_'+i,author:name,url:b64,tag:tag,time:new Date().toLocaleString('fr-FR',{day:'2-digit',month:'long',hour:'2-digit',minute:'2-digit'})};
-      // Try Firebase first
+      // Show immediately, send to Firebase in background (non-blocking)
+      photos.unshift(p);rGallery();
       if(window.fbOK){
-        fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).then(function(){
-          pb.style.width=((i+1)/pending.length*100)+'%';i++;next();
-        }).catch(function(){photos.unshift(p);rGallery();pb.style.width=((i+1)/pending.length*100)+'%';i++;next();});
-      } else {
-        photos.unshift(p);rGallery();
-        pb.style.width=((i+1)/pending.length*100)+'%';i++;next();
+        fbPhotos.push({author:p.author,url:p.url,tag:p.tag,time:p.time,ts:firebase.database.ServerValue.TIMESTAMP}).catch(function(){});
       }
+      pb.style.width=((i+1)/pending.length*100)+'%';
+      i++;
+      setTimeout(next,30);
     });
   }
   next();
