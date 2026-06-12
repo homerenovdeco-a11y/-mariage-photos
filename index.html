@@ -410,15 +410,64 @@ document.getElementById('ubtn').addEventListener('click',function(){
 });
 
 function compress(file,max,q,cb){
-  var img=new Image(),url=URL.createObjectURL(file);
-  img.onload=function(){
-    var w=img.width,h=img.height;
-    if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
-    var c=document.createElement('canvas');c.width=w;c.height=h;
-    c.getContext('2d').drawImage(img,0,0,w,h);
-    URL.revokeObjectURL(url);cb(c.toDataURL('image/jpeg',q));
-  };
-  img.src=url;
+  var url=URL.createObjectURL(file);
+  var done=false;
+  var timeout=setTimeout(function(){
+    if(done)return;done=true;
+    URL.revokeObjectURL(url);
+    // Fallback: just send original file as base64 without resizing
+    var fr=new FileReader();
+    fr.onload=function(){cb(fr.result);};
+    fr.readAsDataURL(file);
+  },4000);
+
+  if(window.createImageBitmap){
+    createImageBitmap(file).then(function(bitmap){
+      if(done)return;done=true;clearTimeout(timeout);
+      var w=bitmap.width,h=bitmap.height;
+      if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+      var c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(bitmap,0,0,w,h);
+      URL.revokeObjectURL(url);
+      cb(c.toDataURL('image/jpeg',q));
+    }).catch(function(){
+      if(done)return;done=true;clearTimeout(timeout);
+      URL.revokeObjectURL(url);
+      var img=new Image();
+      img.onload=function(){
+        var w=img.width,h=img.height;
+        if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        cb(c.toDataURL('image/jpeg',q));
+      };
+      img.onerror=function(){
+        var fr=new FileReader();
+        fr.onload=function(){cb(fr.result);};
+        fr.readAsDataURL(file);
+      };
+      img.src=URL.createObjectURL(file);
+    });
+  } else {
+    var img=new Image();
+    img.onload=function(){
+      if(done)return;done=true;clearTimeout(timeout);
+      var w=img.width,h=img.height;
+      if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+      var c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      cb(c.toDataURL('image/jpeg',q));
+    };
+    img.onerror=function(){
+      if(done)return;done=true;clearTimeout(timeout);
+      URL.revokeObjectURL(url);
+      var fr=new FileReader();
+      fr.onload=function(){cb(fr.result);};
+      fr.readAsDataURL(file);
+    };
+    img.src=url;
+  }
 }
 
 // Firebase désactivé temporairement
