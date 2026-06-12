@@ -302,6 +302,13 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
+
+<div style="text-align:center;padding:30px 16px;border-top:1px solid var(--or-pale);">
+  <button id="copyLinkBtn" style="background:none;border:1.5px solid var(--or-pale);color:var(--gris);font-family:'Jost',system-ui,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:2px;cursor:pointer;">
+    📋 Copier le lien de l'appli
+  </button>
+  <p style="font-size:10px;color:var(--gris);margin-top:8px;font-style:italic;font-family:'Cormorant Garamond',Georgia,serif;">Pour partager facilement avec d'autres invités</p>
+</div>
 <div class="lb" id="lb">
   <div class="lb-in">
     <button class="lb-x" id="lbx">✕</button>
@@ -989,6 +996,30 @@ document.getElementById('exportZip').addEventListener('click', function(){
     btn.textContent='📦 Export ZIP';btn.disabled=false;
   });
 });
+
+document.getElementById('copyLinkBtn').addEventListener('click', function(){
+  var url = 'https://glistening-smakager-80ded9.netlify.app';
+  var btn = this;
+  function showCopied(){
+    btn.textContent = '✓ Lien copié !';
+    setTimeout(function(){btn.innerHTML='📋 Copier le lien de l\'appli';},2000);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(showCopied).catch(function(){
+      fallbackCopy(url, showCopied);
+    });
+  } else {
+    fallbackCopy(url, showCopied);
+  }
+});
+function fallbackCopy(text, cb){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
+  if(cb)cb();
+}
 </script>
 </body>
 </html>
