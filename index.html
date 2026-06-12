@@ -731,7 +731,7 @@ function dF(img,f){
   else if(f===7){c.fillStyle='white';c.fillRect(0,0,S,S);c.fillStyle='#2C1F0E';c.fillRect(0,0,S,6);c.fillRect(0,S-6,S,6);cs(img,c,0,6,S,S-96);c.fillStyle='white';c.fillRect(0,S-96,S,96);c.fillStyle='#2C1F0E';c.textAlign='left';c.font='italic 22px serif';c.fillText('Solène & Sébastien',30,S-52);c.font='13px sans-serif';c.fillStyle='#7A6E62';c.fillText('Mariage · 27 juin 2026',30,S-28);c.fillStyle='#C9A84C';c.textAlign='right';c.font='20px serif';c.fillText('✦',S-30,S-38);}
   else if(f===8){c.fillStyle='#1a1a1a';c.fillRect(0,0,S,S);c.fillStyle='#333';c.fillRect(0,0,S,60);c.fillRect(0,S-60,S,60);for(var i=0;i<10;i++){c.fillStyle='#555';c.fillRect(i*80+10,10,40,40);c.fillRect(i*80+10,S-50,40,40);}cs(img,c,0,60,S,S-120);c.fillStyle='white';c.textAlign='center';c.font='italic 22px serif';c.fillText('Solène & Sébastien · 27.06.2026',S/2,S-22);}
   else if(f===9){c.fillStyle='#F5F0E8';c.fillRect(0,0,S,S);c.strokeStyle='#8BAF7C';c.lineWidth=2;c.strokeRect(20,20,S-40,S-40);c.font='30px serif';c.textAlign='center';[[20,34],[S-20,34],[20,S-20],[S-20,S-20]].forEach(function(p){c.fillText('🌿',p[0],p[1]);});c.fillStyle='#3D5A2E';c.font='italic 26px serif';c.fillText('Mariage Solène & Sébastien',S/2,62);cs(img,c,32,74,S-64,S-134);c.fillStyle='#3D5A2E';c.font='italic 22px serif';c.fillText('27 · 06 · 2026',S/2,S-14);}
-  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir https://glistening-smakager-80ded9.netlify.app');
+  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir https://homerenovdeco-a11y.github.io/-mariage-photos/');
 }
 
 
@@ -940,7 +940,7 @@ function drawF(img, frame){
     c.fillStyle='#3D5A2E';c.font='italic 300 22px serif';c.fillText('27 · 06 · 2026',S/2,S-14);
   }
 
-  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage S&S 💛 https://glistening-smakager-80ded9.netlify.app');
+  document.getElementById('swa').href='https://wa.me/?text='+encodeURIComponent('Notre souvenir du mariage S&S 💛 https://homerenovdeco-a11y.github.io/-mariage-photos/');
 }
 document.getElementById('fdl').addEventListener('click',function(){
   var a=document.createElement('a');a.download='souvenir-ss.jpg';a.href=document.getElementById('fc').toDataURL('image/jpeg',.92);a.click();
@@ -998,7 +998,7 @@ document.getElementById('exportZip').addEventListener('click', function(){
 });
 
 document.getElementById('copyLinkBtn').addEventListener('click', function(){
-  var url = 'https://glistening-smakager-80ded9.netlify.app';
+  var url = 'https://homerenovdeco-a11y.github.io/-mariage-photos/';
   var btn = this;
   function showCopied(){
     btn.textContent = '✓ Lien copié !';
