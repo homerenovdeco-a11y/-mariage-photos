@@ -133,6 +133,18 @@ select.inp{cursor:pointer;}
   </div>
 </div>
 
+<div id="welcomeBanner" style="display:none;background:linear-gradient(135deg,var(--or),var(--or-pale));text-align:center;padding:16px;">
+  <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-style:italic;color:var(--brun);margin:0;">🎉 Bienvenue à tous pour cette journée si spéciale ! 🎉</p>
+</div>
+<div id="adminDash" style="display:none;background:#2C1F0E;padding:14px;text-align:center;">
+  <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C0392B;margin-bottom:8px;">📊 Tableau de bord admin</div>
+  <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;">
+    <div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;color:var(--or);" id="dashPhotos">0</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Photos</div></div>
+    <div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;color:var(--or);" id="dashGuests">0</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Invités actifs</div></div>
+    <div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;color:var(--or);" id="dashVoeux">0</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Vœux</div></div>
+    <div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;color:var(--or);" id="dashVotes">0</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Votes concours</div></div>
+  </div>
+</div>
 <div class="cd" id="cd">
   <div class="cd-label">Le grand jour dans</div>
   <div class="cd-row">
@@ -194,6 +206,12 @@ select.inp{cursor:pointer;}
       <button class="obtn" id="ssbtn" style="margin-left:auto">▶ Diaporama</button>
       <button class="obtn" id="dlbtn">⬇ Tout télécharger</button>
       <button class="obtn" id="exportZip" style="display:none;background:#C0392B;color:white;border-color:#C0392B;">📦 Export ZIP</button>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+      <select class="inp" id="sortSelect" style="flex:none;width:auto;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;">
+        <option value="recent">🕐 Plus récentes</option>
+        <option value="reacted">❤️ Plus réagies</option>
+      </select>
     </div>
     <div class="chips" id="tagchips">
       <button class="chip on" data-tag="all">Tous</button>
@@ -382,6 +400,10 @@ window.addEventListener("load", function() {
 // ── COUNTDOWN ──
 function tick(){
   var now=new Date();
+  var weddingDay=new Date('2026-06-27T00:00:00');
+  var weddingDayEnd=new Date('2026-06-28T00:00:00');
+  var banner=document.getElementById('welcomeBanner');
+  if(banner) banner.style.display=(now>=weddingDay && now<weddingDayEnd)?'block':'none';
   var ceremonie=new Date('2026-06-27T16:00:00');
   var finConcours=new Date('2026-06-28T14:00:00');
   var cdEl=document.getElementById('cd');
@@ -579,6 +601,10 @@ function cV(){document.getElementById('vbtn').disabled=!(document.getElementById
 
 // ── GALLERY ──
 function rGallery(){
+  if(!document.getElementById('sortSelect').dataset.bound){
+    document.getElementById('sortSelect').dataset.bound='1';
+    document.getElementById('sortSelect').addEventListener('change',rGallery);
+  }
   var authors=Array.from(new Set(photos.map(function(p){return p.author;})));
   var fc=document.getElementById('fchips');
   fc.innerHTML='<button class="chip'+(aflt==='all'?' on':'')+'" data-f="all">Tous les invités</button>';
@@ -597,6 +623,14 @@ function rGallery(){
   var fl=photos.slice();
   if(aflt!=='all')fl=fl.filter(function(p){return p.author===aflt;});
   if(atag!=='all')fl=fl.filter(function(p){return p.tag===atag;});
+  var sortMode=document.getElementById('sortSelect')?document.getElementById('sortSelect').value:'recent';
+  if(sortMode==='reacted'){
+    fl.sort(function(a,b){
+      var ra=Object.values(a.reactions||{}).reduce(function(s,x){return s+x;},0);
+      var rb=Object.values(b.reactions||{}).reduce(function(s,x){return s+x;},0);
+      return rb-ra;
+    });
+  }
   document.getElementById('gbadge').textContent=photos.length+(photos.length>1?' photos':' photo');
   document.getElementById('emp').style.display=photos.length?'none':'block';
   var g=document.getElementById('gal');g.innerHTML='';
@@ -798,12 +832,12 @@ function setupFirebaseListeners(){
   window.fbPhotos.on("value",function(snap){
     photos=[];
     if(snap.exists())snap.forEach(function(c){photos.unshift(Object.assign({id:c.key},c.val()));});
-    rGallery();
+    rGallery();updateDashboard();
   });
   window.fbVoeux.on("value",function(snap){
     voeux=[];
     if(snap.exists())snap.forEach(function(c){voeux.unshift(Object.assign({id:c.key},c.val()));});
-    rVoeux();
+    rVoeux();updateDashboard();
   });
   // Voeux submit via Firebase
   document.getElementById("vbtn").addEventListener("click",function(){
@@ -1015,6 +1049,8 @@ document.addEventListener('DOMContentLoaded', function(){
       adminMode = !adminMode;
       document.getElementById('adminBadge').style.display = adminMode ? 'inline-block' : 'none';
       document.getElementById('exportZip').style.display = adminMode ? 'inline-block' : 'none';
+      document.getElementById('adminDash').style.display = adminMode ? 'block' : 'none';
+      if(adminMode) updateDashboard();
       rGallery();
     }
   });
@@ -1102,6 +1138,17 @@ function launchConfetti(){
     })(c,duration,rotation,drift);
   }
   setTimeout(function(){container.remove();},3500);
+}
+
+function updateDashboard(){
+  if(!adminMode)return;
+  document.getElementById('dashPhotos').textContent=photos.length;
+  var authors=Array.from(new Set(photos.map(function(p){return p.author;})));
+  document.getElementById('dashGuests').textContent=authors.length;
+  document.getElementById('dashVoeux').textContent=voeux.length;
+  var vt={};try{vt=JSON.parse(localStorage.getItem('ss_cv')||'{}');}catch(e){}
+  var totalVotes=Object.values(vt).reduce(function(s,x){return s+x;},0);
+  document.getElementById('dashVotes').textContent=totalVotes;
 }
 </script>
 </body>
