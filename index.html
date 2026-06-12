@@ -173,6 +173,7 @@ select.inp{cursor:pointer;}
     <button class="btn" id="ubtn" disabled>Partager</button>
     <div class="prog-wrap" id="pw"><div class="prog-bar" id="pb"></div></div>
     <p class="status" id="stxt"></p>
+    <p style="font-size:10px;color:#999;text-align:center;" id="fbdbg">Firebase: vérification…</p>
     
   </div>
   <div class="gwrap">
@@ -342,6 +343,10 @@ function initFirebase(){
   }
 }
 initFirebase();
+setInterval(function(){
+  var el=document.getElementById('fbdbg');
+  if(el) el.textContent='Firebase: '+(window.fbOK?'✅ connecté':'⏳ connexion...');
+},500);
 
 window.addEventListener("load", function() {
 // ── COUNTDOWN ──
